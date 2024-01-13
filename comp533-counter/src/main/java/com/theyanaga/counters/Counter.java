@@ -2,8 +2,8 @@ package com.theyanaga.counters;
 
 public interface Counter {
 
-   public void increment();
+   public void increment() throws InterruptedException;
 
-   public int getValue();
+   public int getValue() throws InterruptedException;
 
 }

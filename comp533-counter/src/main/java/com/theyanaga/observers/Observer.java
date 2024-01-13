@@ -2,6 +2,6 @@ package com.theyanaga.observers;
 
 public interface Observer {
 
-   public void sendChange();
+   public void sendChange(PropertyChange propertyChange);
 
 }

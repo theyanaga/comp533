@@ -13,11 +13,17 @@ public class NumbersConsumer implements Consumer{
         this.numIncrements = numIncrements;
     }
 
+    @Override
     public void run() {
-        this.consumeNumbers();
+        try {
+            this.consumeNumbers();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void consumeNumbers() {
+    public void consumeNumbers() throws InterruptedException {
         for (int i = 0; i < numIncrements; i++) {
             this.counter.getValue();
         }

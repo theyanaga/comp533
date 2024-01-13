@@ -12,13 +12,18 @@ public class NumbersProducer implements Producer {
         this.numIncrements = numIncrements;
     }
 
-    public void produceNumbers() {
+    public void produceNumbers() throws InterruptedException{
         for (int i = 0; i < numIncrements;i++) {
             counter.increment();
         }
     }
 
     public void run() {
-        this.produceNumbers();
+        try {
+            this.produceNumbers();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

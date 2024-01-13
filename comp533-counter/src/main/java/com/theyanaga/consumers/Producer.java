@@ -2,6 +2,6 @@ package com.theyanaga.consumers;
 
 public interface Producer extends Runnable {
 
-   public void produceNumbers();
+   public void produceNumbers() throws InterruptedException;
 
 }
