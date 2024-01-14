@@ -17,7 +17,7 @@ public class QueueObserver implements Observer {
         propertyChange.callerName() + " is attempting method: " + propertyChange.methodName());
     switch (propertyChange.methodName()) {
       case INITIAL_WAIT -> this.entryQueue.add(propertyChange.callerName());
-      case WAIT -> this.waitingQueue.add(propertyChange.callerName());
+      case WAIT -> this.handleWait(propertyChange.callerName());
       case NOTIFY -> this.handleNotify(propertyChange.callerName());
       case NOTIFY_ALL -> this.handleNotifyAll(propertyChange.callerName());
       default -> {
@@ -28,6 +28,8 @@ public class QueueObserver implements Observer {
     printState();
   }
 
+  // Logic here is not quite right, b/c they could be in the ready queue for the first iteration. Although, arguably this is the right semantics to use
+  // since they can't be "notified" on the beginning of their execution.
   private void wasThreadJustNotified(String callerName) {
     if (waitingQueue.contains(callerName)) {
       System.out.println(callerName + " was just notified!");
@@ -35,6 +37,11 @@ public class QueueObserver implements Observer {
       urgentQueue.add(callerName);
       printState();
     }
+  }
+
+  public void handleWait(String callerName) {
+    this.waitingQueue.add(callerName);
+    this.executingThread = "None";
   }
 
   private void handleNotifyAll(String callerName) {
