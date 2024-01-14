@@ -27,7 +27,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
     this.notifyObservers(new PropertyChange(callerName, Methods.NOTIFY_ALL));
-    notifyAll();
+    notify();
   }
 
   @Override
