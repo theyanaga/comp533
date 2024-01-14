@@ -1,3 +1,5 @@
 package com.theyanaga.observers;
 
-public record PropertyChange(String methodName) {}
+import com.theyanaga.helpers.Methods;
+
+public record PropertyChange(String callerName, Methods methodName) {}

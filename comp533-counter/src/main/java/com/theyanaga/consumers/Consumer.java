@@ -1,4 +1,4 @@
-package com.theyanaga.producers;
+package com.theyanaga.consumers;
 
 public interface Consumer extends Runnable {
 

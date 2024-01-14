@@ -1,52 +1,33 @@
 package com.theyanaga.counters;
 
+import com.theyanaga.helpers.Methods;
+import com.theyanaga.observables.Observable;
 import com.theyanaga.observers.Observer;
 import com.theyanaga.observers.PropertyChange;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SynchronizedObservableCounter extends ObservableCounter {
+public class SynchronizedObservableCounter extends DefaultCounter implements Observable {
 
   private List<Observer> observers = new ArrayList<>();
+  private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
 
-  private Turn turn = Turn.PRODUCER_TURN;
-
-  @Override
-  public synchronized int getValue() {
-    waitForConsumerTurn();
+  public synchronized int getValue(String callerName) {
+    waitForConsumerTurn(callerName);
     int rv = super.getValue();
-    turn = Turn.PRODUCER_TURN;
-    notify();
+    producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
+    this.notifyObservers(new PropertyChange(callerName, Methods.NOTIFY_ALL));
+    notifyAll();
     return rv;
   }
 
-  @Override
-  public synchronized void increment() {
-    waitForProducerTurn();
+  public synchronized void increment(String callerName) {
+    waitForProducerTurn(callerName);
     super.increment();
-    turn = Turn.CONSUMER_TURN;
-    notify();
-  }
-
-  public void waitForConsumerTurn() {
-    while (!(turn == Turn.CONSUMER_TURN)) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-  public void waitForProducerTurn() {
-    while (!(turn == Turn.PRODUCER_TURN)) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
+    producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
+    this.notifyObservers(new PropertyChange(callerName, Methods.NOTIFY_ALL));
+    notifyAll();
   }
 
   @Override
@@ -57,5 +38,27 @@ public class SynchronizedObservableCounter extends ObservableCounter {
   @Override
   public void notifyObservers(PropertyChange propertyChange) {
     observers.forEach(o -> o.sendChange(propertyChange));
+  }
+
+  public void waitForConsumerTurn(String callerName) {
+    while (!(producerConsumerTurn == ProducerConsumerTurn.CONSUMER_TURN)) {
+      try {
+        this.notifyObservers(new PropertyChange(callerName, Methods.WAIT));
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void waitForProducerTurn(String callerName) {
+    while (!(producerConsumerTurn == ProducerConsumerTurn.PRODUCER_TURN)) {
+      try {
+        this.notifyObservers(new PropertyChange(callerName, Methods.WAIT));
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }

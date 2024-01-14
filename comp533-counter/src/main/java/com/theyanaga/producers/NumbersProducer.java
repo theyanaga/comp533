@@ -1,13 +1,16 @@
-package com.theyanaga.consumers;
+package com.theyanaga.producers;
 
 import com.theyanaga.counters.Counter;
 
 public class NumbersProducer implements Producer {
+
+    private final String name;
     private final Counter counter;
 
     private final int numIncrements;
 
-    public NumbersProducer(Counter counter, int numIncrements) {
+    public NumbersProducer(String name, Counter counter, int numIncrements) {
+        this.name = name;
         this.counter = counter;
         this.numIncrements = numIncrements;
     }
