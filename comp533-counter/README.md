@@ -3,7 +3,7 @@
 ## Executing the Script
 
 ```
-mvn compile exec:java -Dexec.mainClass="com.theyanaga.drivers.MultipleThreadedCoordinatedObservedCounterDriver
+mvn compile exec:java -Dexec.mainClass="com.theyanaga.drivers.MultipleThreadedCoordinatedObservedCounterDriver"
 ```
 
 ## Sample Output
