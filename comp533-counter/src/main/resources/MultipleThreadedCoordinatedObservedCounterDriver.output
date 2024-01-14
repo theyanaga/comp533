@@ -1,0 +1,484 @@
+Producer1 is attempting method: INITIAL_WAIT
+Entry Queue: [Producer1]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: None
+Consumer1 is attempting method: INITIAL_WAIT
+Entry Queue: [Producer1, Consumer1]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: None
+Producer2 is attempting method: INITIAL_WAIT
+Entry Queue: [Producer1, Consumer1, Producer2]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: None
+Consumer2 is attempting method: INITIAL_WAIT
+Entry Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: None
+Producer1 is attempting method: INCREMENT
+Entry Queue: [Consumer1, Producer2, Consumer2]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->1
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: [Consumer1, Producer2, Consumer2]
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: Producer1
+Producer1 is attempting method: WAIT
+Entry Queue: [Consumer1, Producer2, Consumer2]
+Waiting Queue: [Producer1]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: [Producer2, Consumer2]
+Waiting Queue: [Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--1
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: [Producer2, Consumer2]
+Waiting Queue: [Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Consumer1 is attempting method: WAIT
+Entry Queue: [Producer2, Consumer2]
+Waiting Queue: [Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: [Consumer2]
+Waiting Queue: [Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->2
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: [Consumer2]
+Waiting Queue: [Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+Producer2 is attempting method: WAIT
+Entry Queue: [Consumer2]
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--2
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Consumer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Producer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: [Producer1]
+Executing Thread: Consumer2
+Producer1 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->3
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+Producer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: [Consumer1]
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--3
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Consumer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: [Producer2]
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->4
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+Producer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: [Consumer2]
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--4
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Consumer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Producer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: [Producer1]
+Executing Thread: Consumer2
+Producer1 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->5
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+Producer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: [Consumer1]
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--5
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Consumer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: [Producer2]
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->6
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+Producer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: [Consumer2]
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--6
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Consumer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Producer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: [Producer1]
+Executing Thread: Consumer2
+Producer1 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->7
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+Producer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: [Consumer1]
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--7
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Consumer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: [Producer2]
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->8
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+Producer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: [Consumer2]
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--8
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Consumer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Producer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: [Producer1]
+Executing Thread: Consumer2
+Producer1 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->9
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+Producer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: [Consumer1]
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--9
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Consumer1 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: [Producer2]
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->10
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1]
+Urgent Queue: []
+Executing Thread: Producer2
+Producer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Consumer2, Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: [Consumer2]
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--10
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Consumer2 is attempting method: WAIT
+Entry Queue: []
+Waiting Queue: [Producer1, Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer2
+Producer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: [Producer1]
+Executing Thread: Consumer2
+Producer1 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+increment-->11
+Producer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer1, Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Producer1
+Consumer1 was just notified!
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2]
+Urgent Queue: [Consumer1]
+Executing Thread: Producer1
+Consumer1 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer1
+getValue<--11
+Consumer1 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Producer2, Consumer2]
+Urgent Queue: []
+Executing Thread: Consumer1
+Producer2 was just notified!
+Entry Queue: []
+Waiting Queue: [Consumer2]
+Urgent Queue: [Producer2]
+Executing Thread: Consumer1
+Producer2 is attempting method: INCREMENT
+Entry Queue: []
+Waiting Queue: [Consumer2]
+Urgent Queue: []
+Executing Thread: Producer2
+increment-->12
+Producer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: [Consumer2]
+Urgent Queue: []
+Executing Thread: Producer2
+Consumer2 was just notified!
+Entry Queue: []
+Waiting Queue: []
+Urgent Queue: [Consumer2]
+Executing Thread: Producer2
+Consumer2 is attempting method: GET_VALUE
+Entry Queue: []
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: Consumer2
+getValue<--12
+Consumer2 is attempting method: NOTIFY_ALL
+Entry Queue: []
+Waiting Queue: []
+Urgent Queue: []
+Executing Thread: Consumer2
