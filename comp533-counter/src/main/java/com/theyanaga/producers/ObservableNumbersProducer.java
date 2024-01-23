@@ -9,9 +9,8 @@ import com.theyanaga.observers.PropertyChange;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObservableNumbersProducer implements Observable, Runnable {
+public class ObservableNumbersProducer implements  Runnable {
 
-  private List<Observer> observers = new ArrayList<>();
 
   private final String name;
   private final SynchronizedObservableCounter counter;
@@ -27,16 +26,6 @@ public class ObservableNumbersProducer implements Observable, Runnable {
 
   public void produceNumbers() throws InterruptedException {
     for (int i = 0; i < numIncrements; i++) {
-      if (i == 0) {
-        this.notifyObservers(new PropertyChange(this.name, Methods.INITIAL_WAIT));
-      }
-      else {
-        this.notifyObservers(new PropertyChange(this.name, Methods.WAIT));
-      }
-      synchronized (this) {
-        this.wait();
-      }
-      this.notifyObservers(new PropertyChange(this.name, Methods.INCREMENT));
       counter.increment(this.name);
     }
   }
@@ -50,13 +39,4 @@ public class ObservableNumbersProducer implements Observable, Runnable {
     }
   }
 
-  @Override
-  public void addObserver(Observer observer) {
-    observers.add(observer);
-  }
-
-  @Override
-  public void notifyObservers(PropertyChange propertyChange) {
-    observers.forEach(o -> o.sendChange(propertyChange));
-  }
 }

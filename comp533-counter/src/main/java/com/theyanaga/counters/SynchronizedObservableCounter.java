@@ -1,50 +1,73 @@
 package com.theyanaga.counters;
 
-import com.theyanaga.helpers.Methods;
 import com.theyanaga.observables.Observable;
 import com.theyanaga.observers.Observer;
-import com.theyanaga.observers.PropertyChange;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class SynchronizedObservableCounter extends DefaultCounter implements Observable {
 
   private List<Observer> observers = new ArrayList<>();
+
+  private Observer observer;
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
 
-  public synchronized int getValue(String callerName) {
+  public int getValue(String callerName) {
+    observer.attemptedSynchronizedGetValue(callerName);
+    int rv = synchronizedGetValue(callerName);
+    observer.leftSynchronizedGetValue(callerName);
+    return rv;
+  }
+
+
+  public synchronized int synchronizedGetValue(String callerName) {
+    observer.enteredSynchronizedGetValue(callerName);
+    sleep();
     waitForConsumerTurn(callerName);
     int rv = super.getValue();
     producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
-    this.notifyObservers(new PropertyChange(callerName, Methods.NOTIFY_ALL));
     notifyAll();
     return rv;
   }
 
-  public synchronized void increment(String callerName) {
+  public void increment(String callerName){
+    observer.attemptedSynchronizedIncrement(callerName);
+    synchronizedIncrement(callerName);
+    observer.leftSynchronizedIncrement(callerName);
+  }
+
+
+  public synchronized void synchronizedIncrement(String callerName) {
+    observer.enteredSynchronizedIncrement(callerName);
+    sleep();
     waitForProducerTurn(callerName);
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
-    this.notifyObservers(new PropertyChange(callerName, Methods.NOTIFY_ALL));
     notify();
   }
 
-  @Override
-  public void addObserver(Observer observer) {
-    observers.add(observer);
+  private void sleep() {
+    try {
+      Thread.sleep(100L);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
-  public void notifyObservers(PropertyChange propertyChange) {
-    observers.forEach(o -> o.sendChange(propertyChange));
+  public void setQueueObserver(Observer observer) {
+    this.observer = observer;
   }
 
   public void waitForConsumerTurn(String callerName) {
     while (!(producerConsumerTurn == ProducerConsumerTurn.CONSUMER_TURN)) {
       try {
-        this.notifyObservers(new PropertyChange(callerName, Methods.WAIT));
+        observer.enteredWait(callerName);
         wait();
+        observer.leftWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -54,11 +77,13 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
   public void waitForProducerTurn(String callerName) {
     while (!(producerConsumerTurn == ProducerConsumerTurn.PRODUCER_TURN)) {
       try {
-        this.notifyObservers(new PropertyChange(callerName, Methods.WAIT));
+        observer.enteredWait(callerName);
         wait();
+        observer.leftWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
   }
+
 }

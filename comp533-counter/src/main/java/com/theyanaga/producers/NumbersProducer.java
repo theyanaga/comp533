@@ -17,6 +17,7 @@ public class NumbersProducer implements Producer {
 
     public void produceNumbers() throws InterruptedException{
         for (int i = 0; i < numIncrements;i++) {
+            this.wait();
             counter.increment();
         }
     }
