@@ -6,7 +6,6 @@ import com.theyanaga.observers.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
 
 public class SynchronizedObservableCounter extends DefaultCounter implements Observable {
 
@@ -24,9 +23,9 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
 
   public synchronized int synchronizedGetValue(String callerName) {
+    sleep();
     observer.enteredSynchronizedGetValue(callerName);
     waitForConsumerTurn(callerName);
-    sleep();
     int rv = super.getValue();
     producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
     notifyAll();
@@ -41,9 +40,9 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
 
   public synchronized void synchronizedIncrement(String callerName) {
+    sleep();
     observer.enteredSynchronizedIncrement(callerName);
     waitForProducerTurn(callerName);
-    sleep();
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
     notify();
@@ -68,7 +67,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
         observer.enteredWait(callerName);
         wait();
         observer.leftWait(callerName);
-        sleep();
+        observer.resumedExecutionAfterWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -81,7 +80,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
         observer.enteredWait(callerName);
         wait();
         observer.leftWait(callerName);
-        sleep();
+        observer.resumedExecutionAfterWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

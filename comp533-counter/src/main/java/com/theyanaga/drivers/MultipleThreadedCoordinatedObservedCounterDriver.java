@@ -29,13 +29,10 @@ public class MultipleThreadedCoordinatedObservedCounterDriver {
     consumerThread1.start();
     consumerThread2.start();
     sleep(500L);
-    for (int i = 0; i < 5; i++) {
-      notifyRunnable(producer1);
-      notifyRunnable(consumer1);
-      notifyRunnable(producer2);
-      notifyRunnable(consumer2);
-    }
-
+    notifyRunnable(producer1);
+    notifyRunnable(consumer1);
+    notifyRunnable(producer2);
+    notifyRunnable(consumer2);
   }
 
   public static void notifyRunnable(ControllableRunnable r) throws InterruptedException {
@@ -45,5 +42,4 @@ public class MultipleThreadedCoordinatedObservedCounterDriver {
     }
     Thread.sleep(50L);
   }
-
 }

@@ -17,5 +17,5 @@ public interface Observer {
    public void enteredSynchronizedIncrement(String callerName);
    public void leftSynchronizedIncrement(String callerName);
 
-
+  public void resumedExecutionAfterWait(String callerName);
 }

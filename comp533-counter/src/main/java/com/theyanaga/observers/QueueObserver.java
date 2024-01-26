@@ -18,6 +18,8 @@ public class QueueObserver implements Observer {
     Tracer.log(propertyChange);
     String currentCaller = propertyChange.callerName();
     switch (propertyChange.methodName()) {
+      case RESUME_AFTER_WAIT:
+        handleResumeExecutionAfterWait(currentCaller);
       case WAIT:
         handleWait(propertyChange, currentCaller);
         break;
@@ -29,13 +31,19 @@ public class QueueObserver implements Observer {
     printState();
   }
 
+  private void handleResumeExecutionAfterWait(String currentCaller) {
+    this.urgentQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+    this.executingThread = currentCaller;
+  }
+
   private void handleWait(PropertyChange propertyChange, String currentCaller) {
     if (propertyChange.action() == Action.ENTERED) {
       this.conditionQueue.add(currentCaller);
       this.executingThread = "None";
     } else if (propertyChange.action() == Action.LEFT) {
       this.conditionQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
-      this.executingThread = currentCaller;
+      this.urgentQueue.add(currentCaller);
+      this.executingThread = "None";
     }
   }
 
@@ -93,4 +101,11 @@ public class QueueObserver implements Observer {
   public void leftSynchronizedIncrement(String callerName) {
     changeState(new PropertyChange(callerName, Methods.INCREMENT, Action.LEFT));
   }
+
+  @Override
+  public void resumedExecutionAfterWait(String callerName) {
+    changeState(new PropertyChange(callerName, Methods.RESUME_AFTER_WAIT, Action.ENTERED));
+  }
+
+
 }
