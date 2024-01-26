@@ -45,12 +45,12 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
     waitForProducerTurn(callerName);
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
-    notify();
+    notifyAll(); // Notify or notify all?
   }
 
   private void sleep() {
     try {
-      Thread.sleep(100L);
+      Thread.sleep(150L);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
