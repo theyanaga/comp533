@@ -19,44 +19,39 @@ public class QueueObserver implements Observer {
     String currentCaller = propertyChange.callerName();
     switch (propertyChange.methodName()) {
       case WAIT:
-        if (propertyChange.action() == Action.ENTERED) {
-          this.conditionQueue.add(currentCaller);
-          this.executingThread = "None";
-        } else if (propertyChange.action() == Action.LEFT) {
-          this.conditionQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
-          this.executingThread = currentCaller;
-        }
-
+        handleWait(propertyChange, currentCaller);
         break;
       case INCREMENT:
-        if (propertyChange.action() == Action.ATTEMPTED) {
-          this.entryQueue.add(currentCaller);
-        } else if (propertyChange.action() == Action.ENTERED) {
-          this.entryQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
-          this.executingThread = currentCaller;
-        } else {
-          this.executingThread = "None";
-        }
-        break;
       case GET_VALUE:
-        if (propertyChange.action() == Action.ATTEMPTED) {
-          this.entryQueue.add(currentCaller);
-        } else if (propertyChange.action() == Action.ENTERED) {
-          this.entryQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
-          this.executingThread = currentCaller;
-        } else {
-          this.executingThread = "None";
-        }
+        handleSynchronizedMethod(currentCaller, propertyChange, this.entryQueue);
         break;
     }
     printState();
   }
 
+  private void handleWait(PropertyChange propertyChange, String currentCaller) {
+    if (propertyChange.action() == Action.ENTERED) {
+      this.conditionQueue.add(currentCaller);
+      this.executingThread = "None";
+    } else if (propertyChange.action() == Action.LEFT) {
+      this.conditionQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+      this.executingThread = currentCaller;
+    }
+  }
+
+  private void handleSynchronizedMethod(String currentCaller, PropertyChange propertyChange, Queue<String> queue) {
+    if (propertyChange.action() == Action.ATTEMPTED) {
+      queue.add(currentCaller);
+    } else if (propertyChange.action() == Action.ENTERED) {
+      queue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+      this.executingThread = currentCaller;
+    } else {
+      this.executingThread = "None";
+    }
+  }
+
   private void printState() {
-    System.out.println("Entry Queue: " + entryQueue);
-    System.out.println("Condition Queue: " + conditionQueue);
-    System.out.println("Urgent Queue: " + urgentQueue);
-    System.out.println("Executing Thread: " + executingThread);
+    Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, executingThread);
   }
 
   @Override

@@ -25,8 +25,8 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
   public synchronized int synchronizedGetValue(String callerName) {
     observer.enteredSynchronizedGetValue(callerName);
-    sleep();
     waitForConsumerTurn(callerName);
+    sleep();
     int rv = super.getValue();
     producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
     notifyAll();
@@ -42,8 +42,8 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
   public synchronized void synchronizedIncrement(String callerName) {
     observer.enteredSynchronizedIncrement(callerName);
-    sleep();
     waitForProducerTurn(callerName);
+    sleep();
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
     notify();
@@ -68,6 +68,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
         observer.enteredWait(callerName);
         wait();
         observer.leftWait(callerName);
+        sleep();
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -80,6 +81,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
         observer.enteredWait(callerName);
         wait();
         observer.leftWait(callerName);
+        sleep();
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

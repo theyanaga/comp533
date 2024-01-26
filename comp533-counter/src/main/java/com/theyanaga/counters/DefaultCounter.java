@@ -1,11 +1,13 @@
 package com.theyanaga.counters;
 
+import com.theyanaga.helpers.Tracer;
+
 public class DefaultCounter implements Counter {
 
     private int value;
 
     public int getValue() {
-        System.out.println("getValue<--" + value);
+        Tracer.log("getValue<--" + value);
         return value;
     }
 
@@ -13,7 +15,7 @@ public class DefaultCounter implements Counter {
         int temp = value;
         temp++;
         value = temp;
-        System.out.println("increment-->" + value);
+        Tracer.log("increment-->" + value);
     }
 
 }

@@ -1,20 +1,17 @@
 package com.theyanaga.drivers;
 
 import com.theyanaga.consumers.ObservableNumbersConsumer;
-import com.theyanaga.counters.SynchronizedObservableCounter;
 import com.theyanaga.factories.ConsumerFactory;
 import com.theyanaga.factories.ProducerFactory;
 import com.theyanaga.helpers.Tracer;
-import com.theyanaga.observers.Observer;
-import com.theyanaga.observers.QueueObserver;
 import com.theyanaga.producers.ObservableNumbersProducer;
-import com.theyanaga.producers.Producer;
+import com.theyanaga.runnable.ControllableRunnable;
 
 import static java.lang.Thread.sleep;
 
 public class MultipleThreadedCoordinatedObservedCounterDriver {
-
   public static void main(String[] args) throws InterruptedException {
+
     ObservableNumbersProducer producer1 = ProducerFactory.getProducer();
     ObservableNumbersProducer producer2 = ProducerFactory.getProducer();
     ObservableNumbersConsumer consumer1 = ConsumerFactory.getConsumer();
@@ -32,7 +29,7 @@ public class MultipleThreadedCoordinatedObservedCounterDriver {
     consumerThread1.start();
     consumerThread2.start();
     sleep(500L);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
       notifyRunnable(producer1);
       notifyRunnable(consumer1);
       notifyRunnable(producer2);
@@ -41,9 +38,10 @@ public class MultipleThreadedCoordinatedObservedCounterDriver {
 
   }
 
-  public static void notifyRunnable(Object o) throws InterruptedException {
-    synchronized (o) {
-      o.notify();
+  public static void notifyRunnable(ControllableRunnable r) throws InterruptedException {
+    r.setTurn(true);
+    synchronized (r) {
+      r.notify();
     }
     Thread.sleep(50L);
   }

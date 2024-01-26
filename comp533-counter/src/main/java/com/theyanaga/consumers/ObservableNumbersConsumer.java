@@ -5,15 +5,17 @@ import com.theyanaga.helpers.Methods;
 import com.theyanaga.observables.Observable;
 import com.theyanaga.observers.Observer;
 import com.theyanaga.observers.PropertyChange;
+import com.theyanaga.runnable.ControllableRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObservableNumbersConsumer implements  Runnable {
+public class ObservableNumbersConsumer implements ControllableRunnable {
 
   private final String name;
 
   private final SynchronizedObservableCounter counter;
+  private boolean go = false;
 
   private final int numIncrements;
 
@@ -22,6 +24,11 @@ public class ObservableNumbersConsumer implements  Runnable {
     this.name = name;
     this.counter = counter;
     this.numIncrements = numIncrements;
+  }
+
+  @Override
+  public void setTurn(boolean val) {
+    this.go = val;
   }
 
   @Override
@@ -35,7 +42,12 @@ public class ObservableNumbersConsumer implements  Runnable {
 
   public synchronized void consumeNumbers() throws InterruptedException {
     for (int i = 0; i < numIncrements; i++) {
-      this.wait();
+      while (!go) {
+        synchronized (this) {
+          this.wait();
+        }
+      }
+      go = false;
       this.counter.getValue(this.name);
     }
   }
