@@ -4,7 +4,9 @@ import com.theyanaga.helpers.Action;
 import com.theyanaga.helpers.Methods;
 import com.theyanaga.helpers.Tracer;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class QueueObserver implements Observer {
@@ -14,12 +16,17 @@ public class QueueObserver implements Observer {
   private Queue<String> conditionQueue = new LinkedList<>();
   private Queue<String> urgentQueue = new LinkedList<>();
 
+  private List<String> entryQueueEnterOrder = new ArrayList<>();
+
+  private List<String> entryQueueExitOrder = new ArrayList<>();
+
   public synchronized void changeState(PropertyChange propertyChange) {
     Tracer.log(propertyChange);
     String currentCaller = propertyChange.callerName();
     switch (propertyChange.methodName()) {
       case RESUME_AFTER_WAIT:
         handleResumeExecutionAfterWait(currentCaller);
+        break;
       case WAIT:
         handleWait(propertyChange, currentCaller);
         break;
@@ -32,7 +39,7 @@ public class QueueObserver implements Observer {
   }
 
   private void handleResumeExecutionAfterWait(String currentCaller) {
-    this.urgentQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+    removeFromQueue(currentCaller, this.urgentQueue, true);
     this.executingThread = currentCaller;
   }
 
@@ -41,7 +48,7 @@ public class QueueObserver implements Observer {
       this.conditionQueue.add(currentCaller);
       this.executingThread = "None";
     } else if (propertyChange.action() == Action.LEFT) {
-      this.conditionQueue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+      removeFromQueue(currentCaller, conditionQueue, false);
       this.urgentQueue.add(currentCaller);
       this.executingThread = "None";
     }
@@ -50,16 +57,28 @@ public class QueueObserver implements Observer {
   private void handleSynchronizedMethod(String currentCaller, PropertyChange propertyChange, Queue<String> queue) {
     if (propertyChange.action() == Action.ATTEMPTED) {
       queue.add(currentCaller);
+      entryQueueEnterOrder.add(currentCaller);
     } else if (propertyChange.action() == Action.ENTERED) {
-      queue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+      removeFromQueue(currentCaller, queue, false);
+      entryQueueExitOrder.add(currentCaller);
       this.executingThread = currentCaller;
     } else {
       this.executingThread = "None";
     }
   }
 
+  private void removeFromQueue(String currentCaller, Queue<String> queue, boolean isUrgentQueue) {
+    if (this.urgentQueue.size() != 0 && isUrgentQueue) {
+      System.out.println("Caller in the urgent queue took priority: " + currentCaller);
+    }
+    else {
+      System.out.println("Caller in NON-urgent queue took priority: " + currentCaller);
+    }
+    queue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+  }
+
   private void printState() {
-    Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, executingThread);
+    Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, entryQueueEnterOrder, entryQueueExitOrder, executingThread);
   }
 
   @Override

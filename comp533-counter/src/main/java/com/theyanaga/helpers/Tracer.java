@@ -6,15 +6,17 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Date;
+import java.util.List;
 import java.util.Queue;
 
 public class Tracer {
 
   private static boolean on = false;
 
+  private static final int fileSuffix = new File("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/").list().length + 1;
 
   private static int step = 0;
-  private static final int fileSuffix = new File("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/").list().length + 1;
 
   public static void log(String s){
     if (on) {
@@ -30,7 +32,9 @@ public class Tracer {
               + ":"
               + propertyChange.methodName()
               + '-'
-              + propertyChange.action();
+              + propertyChange.action()
+              + "- TIME - "
+              + System.currentTimeMillis() + "\n";
       write(s + "\n");
     }
   }
@@ -39,6 +43,8 @@ public class Tracer {
       Queue<String> entryQueue,
       Queue<String> conditionQueue,
       Queue<String> urgentQueue,
+      List<String> entryQueueEnterOrder,
+      List<String> entryQueueExitOrder,
       String executingThread) {
     if (on) {
       write(
@@ -49,6 +55,8 @@ public class Tracer {
       write("Condition Queue: " + conditionQueue + "\n");
       write("Urgent Queue: " + urgentQueue + "\n");
       write("Executing Thread: " + executingThread + "\n");
+      write("Entry Queue Enter Order: " + entryQueueEnterOrder + "\n");
+      write("Entry Queue Exit Order: " + entryQueueExitOrder + "\n");
       write("-----------------------------------------------------------------------\n");
       step++;
     }

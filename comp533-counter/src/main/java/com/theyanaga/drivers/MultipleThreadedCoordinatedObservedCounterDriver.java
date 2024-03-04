@@ -11,29 +11,33 @@ import static java.lang.Thread.sleep;
 
 public class MultipleThreadedCoordinatedObservedCounterDriver {
   public static void main(String[] args) throws InterruptedException {
-
     ObservableNumbersProducer producer1 = ProducerFactory.getProducer();
     ObservableNumbersProducer producer2 = ProducerFactory.getProducer();
+    ObservableNumbersProducer producer3 = ProducerFactory.getProducer();
     ObservableNumbersConsumer consumer1 = ConsumerFactory.getConsumer();
     ObservableNumbersConsumer consumer2 = ConsumerFactory.getConsumer();
+    ObservableNumbersConsumer consumer3 = ConsumerFactory.getConsumer();
     Thread producerThread1 = new Thread(producer1);
-    producerThread1.setName("Producer1");
     Thread consumerThread1 = new Thread(consumer1);
-    consumerThread1.setName("Consumer1");
     Thread producerThread2 = new Thread(producer2);
-    producerThread2.setName("Producer2");
     Thread consumerThread2 = new Thread(consumer2);
+    Thread producerThread3 = new Thread(producer3);
+    Thread consumerThread3 = new Thread(consumer3);
     Tracer.logTraces();
     producerThread1.start();
     producerThread2.start();
     consumerThread1.start();
     consumerThread2.start();
-    sleep(500L);
+    producerThread3.start();
+    consumerThread3.start();
+    sleep(250L);
     for (int i = 0; i < 6; i++) {
       notifyRunnable(producer1);
       notifyRunnable(consumer1);
       notifyRunnable(producer2);
       notifyRunnable(consumer2);
+      notifyRunnable(producer3);
+      notifyRunnable(consumer3);
     }
 
   }
@@ -43,7 +47,7 @@ public class MultipleThreadedCoordinatedObservedCounterDriver {
     synchronized (r) {
       r.notify();
     }
-    Thread.sleep(50L);
+    Thread.sleep(500L);
   }
 
 }
