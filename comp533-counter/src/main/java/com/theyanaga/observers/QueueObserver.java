@@ -20,6 +20,16 @@ public class QueueObserver implements Observer {
 
   private List<String> entryQueueExitOrder = new ArrayList<>();
 
+  private List<String> conditionQueueEntryOrder = new ArrayList<>();
+
+  private List<String> conditionQueueExitOrder = new ArrayList<>();
+
+  private List<String> urgentQueueEntryOrder = new ArrayList<>();
+  private List<String> urgentQueueExitOrder = new ArrayList<>();
+
+  private List<String> monitorEntryOrder = new ArrayList<>();
+  private List<String> monitorExitOrder = new ArrayList<>();
+
   public synchronized void changeState(PropertyChange propertyChange) {
     Tracer.log(propertyChange);
     String currentCaller = propertyChange.callerName();
@@ -36,20 +46,25 @@ public class QueueObserver implements Observer {
         break;
     }
     printState();
+    printOrders();
   }
 
   private void handleResumeExecutionAfterWait(String currentCaller) {
     removeFromQueue(currentCaller, this.urgentQueue, true);
+    this.urgentQueueExitOrder.add(currentCaller);
     this.executingThread = currentCaller;
   }
 
   private void handleWait(PropertyChange propertyChange, String currentCaller) {
     if (propertyChange.action() == Action.ENTERED) {
       this.conditionQueue.add(currentCaller);
+      this.conditionQueueEntryOrder.add(currentCaller);
       this.executingThread = "None";
     } else if (propertyChange.action() == Action.LEFT) {
       removeFromQueue(currentCaller, conditionQueue, false);
+      this.conditionQueueExitOrder.add(currentCaller);
       this.urgentQueue.add(currentCaller);
+      this.urgentQueueEntryOrder.add(currentCaller);
       this.executingThread = "None";
     }
   }
@@ -60,6 +75,7 @@ public class QueueObserver implements Observer {
       entryQueueEnterOrder.add(currentCaller);
     } else if (propertyChange.action() == Action.ENTERED) {
       removeFromQueue(currentCaller, queue, false);
+      monitorEntryOrder.add(currentCaller);
       entryQueueExitOrder.add(currentCaller);
       this.executingThread = currentCaller;
     } else {
@@ -68,17 +84,21 @@ public class QueueObserver implements Observer {
   }
 
   private void removeFromQueue(String currentCaller, Queue<String> queue, boolean isUrgentQueue) {
-    if (this.urgentQueue.size() != 0 && isUrgentQueue) {
-      System.out.println("Caller in the urgent queue took priority: " + currentCaller);
-    }
-    else {
-      System.out.println("Caller in NON-urgent queue took priority: " + currentCaller);
-    }
     queue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
   }
 
   private void printState() {
-    Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, entryQueueEnterOrder, entryQueueExitOrder, executingThread);
+    Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, executingThread);
+  }
+
+  public void printOrders() {
+    Tracer.logEnterAndExitOrders(
+        entryQueueEnterOrder,
+        entryQueueExitOrder,
+        conditionQueueEntryOrder,
+        conditionQueueExitOrder,
+        urgentQueueEntryOrder,
+        urgentQueueExitOrder);
   }
 
   @Override

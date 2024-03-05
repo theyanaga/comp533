@@ -43,8 +43,6 @@ public class Tracer {
       Queue<String> entryQueue,
       Queue<String> conditionQueue,
       Queue<String> urgentQueue,
-      List<String> entryQueueEnterOrder,
-      List<String> entryQueueExitOrder,
       String executingThread) {
     if (on) {
       write(
@@ -55,10 +53,29 @@ public class Tracer {
       write("Condition Queue: " + conditionQueue + "\n");
       write("Urgent Queue: " + urgentQueue + "\n");
       write("Executing Thread: " + executingThread + "\n");
-      write("Entry Queue Enter Order: " + entryQueueEnterOrder + "\n");
-      write("Entry Queue Exit Order: " + entryQueueExitOrder + "\n");
       write("-----------------------------------------------------------------------\n");
       step++;
+    }
+  }
+
+  public static void logEnterAndExitOrders(
+          List<String> entryQueueEnterOrder,
+          List<String> entryQueueExitOrder,
+          List<String> conditionQueueEnterOrder,
+          List<String> conditionQueueExitOrder,
+          List<String> urgentQueueEnterOrder,
+          List<String> urgentQueueExitOrder
+  ) {
+    if (on) {
+      write(
+              "----------------------------------- Orders ------------------------------------\n");
+      write("Entry Queue Enter Order: " + entryQueueEnterOrder + "\n");
+      write("Entry Queue Exit Order: " + entryQueueExitOrder + "\n");
+      write("Condition Queue Enter Order: " + conditionQueueEnterOrder + "\n");
+      write("Condition Queue Exit Order: " + conditionQueueExitOrder + "\n");
+      write("Urgent Queue Enter Order: " + urgentQueueEnterOrder + "\n");
+      write("Urgent Queue Exit Order: " + urgentQueueExitOrder + "\n");
+      write("-----------------------------------------------------------------------\n");
     }
   }
 
