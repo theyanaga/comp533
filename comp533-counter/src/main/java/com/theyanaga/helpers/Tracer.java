@@ -45,16 +45,16 @@ public class Tracer {
       Queue<String> urgentQueue,
       String executingThread) {
     if (on) {
-      write(
-          "----------------------------------- Step"
-              + step
-              + "------------------------------------\n");
-      write("Entry Queue: " + entryQueue + "\n");
-      write("Condition Queue: " + conditionQueue + "\n");
-      write("Urgent Queue: " + urgentQueue + "\n");
-      write("Executing Thread: " + executingThread + "\n");
-      write("-----------------------------------------------------------------------\n");
-      step++;
+//      write(
+//          "----------------------------------- Step"
+//              + step
+//              + "------------------------------------\n");
+//      write("Entry Queue: " + entryQueue + "\n");
+//      write("Condition Queue: " + conditionQueue + "\n");
+//      write("Urgent Queue: " + urgentQueue + "\n");
+//      write("Executing Thread: " + executingThread + "\n");
+//      write("-----------------------------------------------------------------------\n");
+//      step++;
     }
   }
 
@@ -79,6 +79,15 @@ public class Tracer {
     }
   }
 
+  public static void writeCommand(String command) {
+    try {
+      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
   public static void logTraces() {
     on = true;
   }
@@ -86,7 +95,7 @@ public class Tracer {
   private static void write(String s) {
     System.out.println(s);
     try {
-      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".txt"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
 
     } catch (Exception e) {
       e.printStackTrace();

@@ -17,7 +17,8 @@ import static java.lang.Thread.sleep;
 public class MultipleThreadedCoordinatedObservedCounterDriver {
 
   public static void main(String[] args) throws InterruptedException {
-    regularCase();
+//    regularCase();
+//    createConditionQueue();
     System.exit(1);
   }
 

@@ -21,6 +21,10 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
 
   public int getValue(String callerName) {
+//    Thread t = Thread.currentThread();
+//    synchronized (t) {
+//      wait();
+//    }
     observer.attemptedSynchronizedGetValue(callerName);
     int rv = synchronizedGetValue(callerName);
     observer.leftSynchronizedGetValue(callerName);
