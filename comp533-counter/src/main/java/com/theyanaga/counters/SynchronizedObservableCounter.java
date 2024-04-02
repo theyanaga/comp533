@@ -21,10 +21,6 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
 
   public int getValue(String callerName) {
-//    Thread t = Thread.currentThread();
-//    synchronized (t) {
-//      wait();
-//    }
     observer.attemptedSynchronizedGetValue(callerName);
     int rv = synchronizedGetValue(callerName);
     observer.leftSynchronizedGetValue(callerName);
@@ -71,7 +67,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
   private void sleep() {
     try {
-     Thread.sleep(50L);
+     Thread.sleep(500L);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -83,28 +79,40 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
   }
 
   public void waitForConsumerTurn(String callerName) {
+    boolean hasEnteredWait = false;
     while (!(producerConsumerTurn == ProducerConsumerTurn.CONSUMER_TURN)) {
       try {
-        observer.enteredWait(callerName);
+        if (!hasEnteredWait) {
+          observer.enteredWait(callerName);
+        }
         wait();
-        observer.leftWait(callerName);
-        observer.resumedExecutionAfterWait(callerName);
+        hasEnteredWait = true;
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
+    if (hasEnteredWait) {
+      observer.leftWait(callerName);
+      observer.resumedExecutionAfterWait(callerName);
+    }
   }
 
   public void waitForProducerTurn(String callerName) {
+    boolean hasEnteredWait = false;
     while (!(producerConsumerTurn == ProducerConsumerTurn.PRODUCER_TURN)) {
       try {
-        observer.enteredWait(callerName);
+        if (!hasEnteredWait) {
+          observer.enteredWait(callerName);
+        }
         wait();
-        observer.leftWait(callerName);
-        observer.resumedExecutionAfterWait(callerName);
+        hasEnteredWait = true;
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+    }
+    if (hasEnteredWait) {
+      observer.leftWait(callerName);
+      observer.resumedExecutionAfterWait(callerName);
     }
   }
 
