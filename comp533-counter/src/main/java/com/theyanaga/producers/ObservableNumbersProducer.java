@@ -33,12 +33,12 @@ public class ObservableNumbersProducer implements ControllableRunnable {
 
   public void produceNumbers() throws InterruptedException {
     for (int i = 0; i < numIncrements; i++) {
-      while (!go) {
-        synchronized (this) {
-          this.wait();
-        }
-      }
-      go = false;
+//      while (!go) {
+//        synchronized (this) {
+//          this.wait();
+//        }
+//      }
+//      go = false;
       counter.increment(this.name);
     }
   }

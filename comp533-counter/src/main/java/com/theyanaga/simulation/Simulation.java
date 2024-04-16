@@ -15,6 +15,8 @@ public class Simulation {
   private List<ControllableRunnable> consumers = new ArrayList<>();
   private List<ControllableRunnable> producers = new ArrayList<>();
 
+  private List<Thread> threads = new ArrayList<>();
+
   private long lastExecutedTime;
 
   public Simulation(int numConsumers, int numProducers) {
@@ -30,10 +32,12 @@ public class Simulation {
     Tracer.logTraces();
     for (ControllableRunnable r : consumers) {
       Thread thread = new Thread(r);
+      threads.add(thread);
       thread.start();
     }
     for (ControllableRunnable r : producers) {
       Thread thread = new Thread(r);
+      threads.add(thread);
       thread.start();
     }
     this.lastExecutedTime = System.currentTimeMillis();
@@ -42,20 +46,28 @@ public class Simulation {
   public void releaseConsumer(int idx) {
     doDelay();
     Tracer.writeCommand(String.format("c %d%n", idx));
-    ControllableRunnable consumer = consumers.get(idx);
-    consumer.setTurn(true);
-    synchronized (consumer) {
-      consumer.notify();
+    //    ControllableRunnable consumer = consumers.get(idx);
+    //    consumer.setTurn(true);
+    //    synchronized (consumer) {
+    //      consumer.notify();
+    //    }
+    Thread thread = threads.get(idx);
+    synchronized (thread) {
+      thread.notify();
     }
   }
 
   public void releaseProducer(int idx) {
     doDelay();
     Tracer.writeCommand(String.format("p %d%n", idx));
-    ControllableRunnable producer = producers.get(idx);
-    producer.setTurn(true);
-    synchronized (producer) {
-      producer.notify();
+//    ControllableRunnable producer = producers.get(idx);
+//    producer.setTurn(true);
+//    synchronized (producer) {
+//      producer.notify();
+//    }
+    Thread thread = threads.get(consumers.size() + idx);
+    synchronized (thread) {
+      thread.notify();
     }
   }
 

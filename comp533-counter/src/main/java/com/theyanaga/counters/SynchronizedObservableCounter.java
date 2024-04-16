@@ -3,63 +3,49 @@ package com.theyanaga.counters;
 import com.theyanaga.observables.ObservableWithLock;
 import com.theyanaga.observers.Observer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
-public class SynchronizedObservableCounter extends DefaultCounter implements ObservableWithLock {
+public class SynchronizedObservableCounter extends CounterWithTraceAndLock implements ObservableWithLock {
 
-  private List<Observer> observers = new ArrayList<>();
-
-  private Lock lock = new ReentrantLock();
-
-  private boolean shouldWait = true;
-
-  private Observer observer;
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
 
-  public int getValue(String callerName) {
-    observer.attemptedSynchronizedGetValue(callerName);
+  private void waitForNotification() throws InterruptedException {
+    Thread thread = Thread.currentThread();
+    synchronized (thread) {
+      thread.wait();
+    }
+  }
+
+  public int getValue(String callerName) throws InterruptedException {
+    waitForNotification();
     int rv = synchronizedGetValue(callerName);
-    observer.leftSynchronizedGetValue(callerName);
     return rv;
   }
 
-
   public synchronized int synchronizedGetValue(String callerName) {
-    observer.enteredSynchronizedGetValue(callerName);
+    super.traceEnteredSynchronizedMethod(callerName);
     sleep();
     waitForConsumerTurn(callerName);
-    lock.lock();
-    while (shouldWait) {
-      sleep();
-    }
-    shouldWait = true;
-    lock.unlock();
+    super.waitForRelease();
     int rv = super.getValue();
     producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
     notifyAll();
     return rv;
   }
 
-  public void increment(String callerName){
-    observer.attemptedSynchronizedIncrement(callerName);
+  public void increment(String callerName) throws InterruptedException {
+    waitForNotification();
+    super.traceSynchronizedMethodAttempt(callerName);
     synchronizedIncrement(callerName);
-    observer.leftSynchronizedIncrement(callerName);
+    super.traceLeftSynchronizedMethod(callerName);
   }
 
 
   public synchronized void synchronizedIncrement(String callerName) {
-    observer.enteredSynchronizedIncrement(callerName);
+    super.traceEnteredSynchronizedMethod(callerName);
     waitForProducerTurn(callerName);
-    lock.lock();
-    while (shouldWait) {
-      sleep();
-    }
-    shouldWait = true;
-    lock.unlock();
+    super.waitForRelease();
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
     notify(); // Notify or notify all?
@@ -75,45 +61,31 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
   @Override
   public void setQueueObserver(Observer observer) {
-    this.observer = observer;
+    super.addObserver(observer);
   }
 
   public void waitForConsumerTurn(String callerName) {
-    boolean hasEnteredWait = false;
     while (!(producerConsumerTurn == ProducerConsumerTurn.CONSUMER_TURN)) {
       try {
-        if (!hasEnteredWait) {
-          observer.enteredWait(callerName);
-        }
+        super.traceEnteredWait(callerName);
         wait();
-        hasEnteredWait = true;
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    if (hasEnteredWait) {
-      observer.leftWait(callerName);
-      observer.resumedExecutionAfterWait(callerName);
-    }
+    super.traceLeftWait(callerName);
   }
 
   public void waitForProducerTurn(String callerName) {
-    boolean hasEnteredWait = false;
     while (!(producerConsumerTurn == ProducerConsumerTurn.PRODUCER_TURN)) {
       try {
-        if (!hasEnteredWait) {
-          observer.enteredWait(callerName);
-        }
+        super.traceEnteredWait(callerName);
         wait();
-        hasEnteredWait = true;
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    if (hasEnteredWait) {
-      observer.leftWait(callerName);
-      observer.resumedExecutionAfterWait(callerName);
-    }
+    super.traceLeftWait(callerName);
   }
 
   @Override
@@ -123,7 +95,7 @@ public class SynchronizedObservableCounter extends DefaultCounter implements Obs
 
   @Override
   public void release() {
-    shouldWait = false;
+    super.release();
   }
 
 }

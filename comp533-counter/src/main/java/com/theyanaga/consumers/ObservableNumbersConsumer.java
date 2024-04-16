@@ -42,12 +42,6 @@ public class ObservableNumbersConsumer implements ControllableRunnable {
 
   public synchronized void consumeNumbers() throws InterruptedException {
     for (int i = 0; i < numIncrements; i++) {
-      while (!go) {
-        synchronized (this) {
-          this.wait();
-        }
-      }
-      go = false;
       this.counter.getValue(this.name);
     }
   }
