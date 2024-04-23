@@ -16,7 +16,9 @@ public class Tracer {
 
   private static final int fileSuffix = new File("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/").list().length + 1;
 
-  private static int step = 0;
+  public static void logThread(Thread thread) {
+    log("Thread: " + thread.getName() + " using threadId: " + thread.getId());
+  }
 
   public static void log(String s){
     if (on) {
@@ -58,6 +60,13 @@ public class Tracer {
     }
   }
 
+  public static void logCurrentThreadIds(List<Long> threads) {
+    if (on) {
+      log("Threads: " + threads);
+    }
+
+  }
+
   public static void logEnterAndExitOrders(
           List<String> entryQueueEnterOrder,
           List<String> entryQueueExitOrder,
@@ -97,7 +106,6 @@ public class Tracer {
     System.out.println(s);
     try {
       Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
-
     } catch (Exception e) {
       e.printStackTrace();
     }

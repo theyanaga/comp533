@@ -17,13 +17,7 @@ public class UserInputDriver {
   public static void start(String fileName, SynchronizedObservableCounter counter) throws InterruptedException, FileNotFoundException {
 
 
-    Scanner scanner;
-//    if (args.length > 0) {
-//      scanner = new Scanner(new FileInputStream(args[0]));
-//    }
-//    else {
-      scanner = new Scanner(System.in);
-//    }
+    Scanner scanner = new Scanner(System.in);
 
 
     // Get the number of consumers and producers from the user and create the simulation.
@@ -81,6 +75,7 @@ public class UserInputDriver {
 //    Tracer.writeCommand(numProducers+ "\n");
 //    System.out.printf("There are %d producers.%n", numProducers);
     System.out.printf("Start your consumers and producers.%n");
+    Tracer.logTraces();
     String input = scanner.nextLine();
 
     if (input.equalsIgnoreCase("done")) {

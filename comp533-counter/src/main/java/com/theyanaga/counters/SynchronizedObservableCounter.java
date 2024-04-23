@@ -1,8 +1,11 @@
 package com.theyanaga.counters;
 
+import com.theyanaga.helpers.Tracer;
 import com.theyanaga.observables.RemoteCounter;
 import com.theyanaga.observers.Observer;
 
+import java.rmi.server.RemoteServer;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +17,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 
 
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
-  private Set<Long> threadIds = new HashSet<>();
+  private List<Long> threadIds = new ArrayList<>();
 
   private List<Thread> consumerThreads = new ArrayList<>();
   private List<Thread> producerThreads = new ArrayList<>();
@@ -27,11 +30,16 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     return this.consumerThreads;
   }
 
-  private void waitForNotification(boolean fromConsumer) throws InterruptedException {
+  private void waitForNotification(boolean fromConsumer) throws InterruptedException  {
+    try {
+      System.out.println(RemoteServer.getClientHost());
+    }
+    catch (ServerNotActiveException e) {
+      e.printStackTrace();
+    }
     Thread thread = Thread.currentThread();
     if (!threadIds.contains(thread.getId())) {
       if (fromConsumer) {
-        System.out.println("added consumer");
         consumerThreads.add(thread);
         thread.setName("consumer" + (consumerThreads.size() - 1));
       }
@@ -41,8 +49,10 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
       }
       threadIds.add(thread.getId());
     }
+    Tracer.logCurrentThreadIds(this.threadIds);
     synchronized (thread) {
       thread.wait();
+      Tracer.logThread(thread);
     }
   }
 
@@ -54,6 +64,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     super.traceSynchronizedMethodAttempt(callerName);
     int rv = synchronizedGetValue(callerName);
     super.traceLeftSynchronizedMethod(callerName);
+    sleep();
     return rv;
   }
 
@@ -89,7 +100,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 
   private void sleep() {
     try {
-     Thread.sleep(500L);
+     Thread.sleep(2500L);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

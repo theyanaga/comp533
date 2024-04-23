@@ -51,7 +51,7 @@ public class QueueObserver implements Observer {
 
   private void handleResumeExecutionAfterWait(String currentCaller) {
     removeFromQueue(currentCaller, this.urgentQueue, true);
-    this.urgentQueueExitOrder.add(currentCaller);
+    this.entryQueueExitOrder.add(currentCaller);
     this.executingThread = currentCaller;
   }
 
@@ -63,8 +63,9 @@ public class QueueObserver implements Observer {
     } else if (propertyChange.action() == Action.LEFT) {
       removeFromQueue(currentCaller, conditionQueue, false);
       this.conditionQueueExitOrder.add(currentCaller);
-      this.urgentQueue.add(currentCaller);
-      this.urgentQueueEntryOrder.add(currentCaller);
+      this.entryQueueEnterOrder.add(currentCaller);
+//      this.urgentQueue.add(currentCaller);
+//      this.urgentQueueEntryOrder.add(currentCaller);
       this.executingThread = "None";
     }
   }

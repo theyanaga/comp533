@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class LogGrader {
 
   public static void main(String[] args) throws FileNotFoundException {
-    boolean rv =  gradeLogsMonitorState(
-        "/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs3.out");
+    boolean rv =  testThatUrgentQueueExists(
+        "/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs7.out");
 
     if (rv) {
       System.out.println("Success!");
@@ -19,7 +19,7 @@ public class LogGrader {
     }
   }
 
-  public static boolean gradeLogsMonitorState(String fname) throws FileNotFoundException {
+  public static boolean testThatMonitorEnterOrderIsNonDeterministic(String fname) throws FileNotFoundException {
     Scanner in = new Scanner(new FileInputStream(fname));
 
     List<List<String>> monitorEnterOrders = new ArrayList<>();
@@ -44,10 +44,14 @@ public class LogGrader {
       }
     }
 
-    return areListsEqual(monitorEnterOrders.get(monitorEnterOrders.size() - 1), monitorExitOrders.get(monitorExitOrders.size() - 1));
+    if (!(conditionEnterOrders.get(0).size() == 0)) {
+      return false;
+    }
+
+    return !areListsEqual(monitorEnterOrders.get(monitorEnterOrders.size() - 1), monitorExitOrders.get(monitorExitOrders.size() - 1));
   }
 
-  public static void gradeLogsUrgentQueue(String fname) throws FileNotFoundException {
+  public static boolean testThatUrgentQueueExists(String fname) throws FileNotFoundException {
     Scanner in = new Scanner(new FileInputStream(fname));
 
     List<List<String>> monitorEnterOrders = new ArrayList<>();
@@ -62,7 +66,7 @@ public class LogGrader {
 
       // See if we get the actual queue.
       if (line.equals("Start Orders.")) {
-        in.nextLine(); // Skip  the divider
+        line =  in.nextLine(); // Skip  the divider
         monitorEnterOrders.add(createListFromLine(in.nextLine()));
         monitorExitOrders.add(createListFromLine(in.nextLine()));
         conditionEnterOrders.add(createListFromLine(in.nextLine()));
@@ -72,7 +76,12 @@ public class LogGrader {
       }
     }
 
+    // Check if the queue is actually empty.
+    if (conditionEnterOrders.get(0).size() == 0) {
+      return false;
+    }
 
+    return !areListsEqual(monitorEnterOrders.get(monitorEnterOrders.size() - 1), monitorExitOrders.get(monitorExitOrders.size() - 1));
   }
 
   private static List<String> createListFromLine(String line) {
