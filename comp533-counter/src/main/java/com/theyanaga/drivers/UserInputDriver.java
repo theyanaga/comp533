@@ -1,5 +1,6 @@
 package com.theyanaga.drivers;
 
+import com.theyanaga.counters.SynchronizedObservableCounter;
 import com.theyanaga.helpers.Tracer;
 import com.theyanaga.simulation.Simulation;
 
@@ -13,20 +14,20 @@ public class UserInputDriver {
   public static final String QUIT = "quit";
   public static final String RELEASE = "release";
 
-  public static void main(String[] args) throws InterruptedException, FileNotFoundException {
+  public static void start(String fileName, SynchronizedObservableCounter counter) throws InterruptedException, FileNotFoundException {
 
 
     Scanner scanner;
-    if (args.length > 0) {
-      scanner = new Scanner(new FileInputStream(args[0]));
-    }
-    else {
+//    if (args.length > 0) {
+//      scanner = new Scanner(new FileInputStream(args[0]));
+//    }
+//    else {
       scanner = new Scanner(System.in);
-    }
+//    }
 
 
     // Get the number of consumers and producers from the user and create the simulation.
-    Simulation simulation = createSimulation(scanner);
+    Simulation simulation = createSimulation(scanner, counter);
     simulation.start();
 
     // Get user input for the commands.
@@ -70,18 +71,24 @@ public class UserInputDriver {
     return Integer.parseInt(strings[1]);
   }
 
-  private static Simulation createSimulation(Scanner scanner) {
-    System.out.println("Type a single digit for the number of consumers:");
-    int numConsumers = Integer.parseInt(scanner.nextLine());
-    Tracer.writeCommand(numConsumers + "\n");
-    System.out.printf("There are %d consumers.%n", numConsumers);
-    System.out.println("Type a single digit for the number of producers:");
-    int numProducers= Integer.parseInt(scanner.nextLine());
-    Tracer.writeCommand(numProducers+ "\n");
-    System.out.printf("There are %d producers.%n", numProducers);
+  private static Simulation createSimulation(Scanner scanner, SynchronizedObservableCounter counter) {
+//    System.out.println("Type a single digit for the number of consumers:");
+//    int numConsumers = Integer.parseInt(scanner.nextLine());
+//    Tracer.writeCommand(numConsumers + "\n");
+//    System.out.printf("There are %d consumers.%n", numConsumers);
+//    System.out.println("Type a single digit for the number of producers:");
+//    int numProducers= Integer.parseInt(scanner.nextLine());
+//    Tracer.writeCommand(numProducers+ "\n");
+//    System.out.printf("There are %d producers.%n", numProducers);
+    System.out.printf("Start your consumers and producers.%n");
+    String input = scanner.nextLine();
 
-    // Start the simulation
-    return new Simulation(numConsumers, numProducers);
+    if (input.equalsIgnoreCase("done")) {
+      return new Simulation(counter);
+    }
+    else {
+      throw new RuntimeException("Error!");
+    }
   }
 
 

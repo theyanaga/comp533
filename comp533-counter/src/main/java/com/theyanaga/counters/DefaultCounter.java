@@ -2,7 +2,12 @@ package com.theyanaga.counters;
 
 import com.theyanaga.helpers.Tracer;
 
-public class DefaultCounter implements Counter {
+import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class DefaultCounter implements Counter{
 
     private int value;
 

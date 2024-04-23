@@ -67,8 +67,8 @@ public class Tracer {
           List<String> urgentQueueExitOrder
   ) {
     if (on) {
-      write(
-              "----------------------------------- Orders ------------------------------------\n");
+      write("Start Orders.\n");
+      write("-----------------------------------------------------------------------\n");
       write("Entry Queue Enter Order: " + entryQueueEnterOrder + "\n");
       write("Entry Queue Exit Order: " + entryQueueExitOrder + "\n");
       write("Condition Queue Enter Order: " + conditionQueueEnterOrder + "\n");
@@ -76,6 +76,7 @@ public class Tracer {
       write("Urgent Queue Enter Order: " + urgentQueueEnterOrder + "\n");
       write("Urgent Queue Exit Order: " + urgentQueueExitOrder + "\n");
       write("-----------------------------------------------------------------------\n");
+      write("End Orders.\n");
     }
   }
 

@@ -1,25 +1,59 @@
 package com.theyanaga.counters;
 
-import com.theyanaga.observables.ObservableWithLock;
+import com.theyanaga.observables.RemoteCounter;
 import com.theyanaga.observers.Observer;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 
 
-public class SynchronizedObservableCounter extends CounterWithTraceAndLock implements ObservableWithLock {
+public class SynchronizedObservableCounter extends CounterWithTraceAndLock implements RemoteCounter {
+
 
   private ProducerConsumerTurn producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
+  private Set<Long> threadIds = new HashSet<>();
 
-  private void waitForNotification() throws InterruptedException {
+  private List<Thread> consumerThreads = new ArrayList<>();
+  private List<Thread> producerThreads = new ArrayList<>();
+
+  public List<Thread> getProducerThreads() {
+    return this.producerThreads;
+  }
+
+  public List<Thread> getConsumerThreads() {
+    return this.consumerThreads;
+  }
+
+  private void waitForNotification(boolean fromConsumer) throws InterruptedException {
     Thread thread = Thread.currentThread();
+    if (!threadIds.contains(thread.getId())) {
+      if (fromConsumer) {
+        System.out.println("added consumer");
+        consumerThreads.add(thread);
+        thread.setName("consumer" + (consumerThreads.size() - 1));
+      }
+      else {
+        producerThreads.add(thread);
+        thread.setName("producer" + (producerThreads.size() - 1));
+      }
+      threadIds.add(thread.getId());
+    }
     synchronized (thread) {
       thread.wait();
     }
   }
 
+
+  @Override
   public int getValue(String callerName) throws InterruptedException {
-    waitForNotification();
+    waitForNotification(true);
+    callerName = Thread.currentThread().getName();
+    super.traceSynchronizedMethodAttempt(callerName);
     int rv = synchronizedGetValue(callerName);
+    super.traceLeftSynchronizedMethod(callerName);
     return rv;
   }
 
@@ -34,8 +68,10 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     return rv;
   }
 
+  @Override
   public void increment(String callerName) throws InterruptedException {
-    waitForNotification();
+    waitForNotification(false);
+    callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
     synchronizedIncrement(callerName);
     super.traceLeftSynchronizedMethod(callerName);
@@ -59,7 +95,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     }
   }
 
-  @Override
+//  @Override
   public void setQueueObserver(Observer observer) {
     super.addObserver(observer);
   }
@@ -88,12 +124,12 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     super.traceLeftWait(callerName);
   }
 
-  @Override
+//  @Override
   public Lock getLock() {
     return null;
   }
 
-  @Override
+//  @Override
   public void release() {
     super.release();
   }

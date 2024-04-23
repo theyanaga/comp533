@@ -6,6 +6,6 @@ import com.theyanaga.observers.QueueObserver;
 
 public interface Observable {
 
-    public void setQueueObserver(Observer observer);
+//    public void setQueueObserver(Observer observer);
 
 }

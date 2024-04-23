@@ -7,6 +7,7 @@ import com.theyanaga.factories.ProducerFactory;
 import com.theyanaga.helpers.Tracer;
 import com.theyanaga.runnable.ControllableRunnable;
 
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,19 @@ public class Simulation {
 
   private long lastExecutedTime;
 
-  public Simulation(int numConsumers, int numProducers) {
-    for (int i = 0; i < numConsumers; i++) {
-      consumers.add(ConsumerFactory.getConsumer());
-    }
-    for (int i = 0; i < numProducers; i++) {
-      producers.add(ProducerFactory.getProducer());
-    }
+//  public Simulation(int numConsumers, int numProducers) {
+//    for (int i = 0; i < numConsumers; i++) {
+//      consumers.add(ConsumerFactory.getConsumer());
+//    }
+//    for (int i = 0; i < numProducers; i++) {
+//      producers.add(ProducerFactory.getProducer());
+//    }
+//  }
+
+  private SynchronizedObservableCounter counter;
+
+  public Simulation(SynchronizedObservableCounter counter) {
+    this.counter = counter;
   }
 
   public void start() {
@@ -46,12 +53,7 @@ public class Simulation {
   public void releaseConsumer(int idx) {
     doDelay();
     Tracer.writeCommand(String.format("c %d%n", idx));
-    //    ControllableRunnable consumer = consumers.get(idx);
-    //    consumer.setTurn(true);
-    //    synchronized (consumer) {
-    //      consumer.notify();
-    //    }
-    Thread thread = threads.get(idx);
+    Thread thread =  counter.getConsumerThreads().get(idx);
     synchronized (thread) {
       thread.notify();
     }
@@ -60,12 +62,7 @@ public class Simulation {
   public void releaseProducer(int idx) {
     doDelay();
     Tracer.writeCommand(String.format("p %d%n", idx));
-//    ControllableRunnable producer = producers.get(idx);
-//    producer.setTurn(true);
-//    synchronized (producer) {
-//      producer.notify();
-//    }
-    Thread thread = threads.get(consumers.size() + idx);
+    Thread thread =  counter.getProducerThreads().get(idx);
     synchronized (thread) {
       thread.notify();
     }

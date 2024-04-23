@@ -14,4 +14,10 @@ public class ConsumerFactory {
     nextConsumerId++;
     return rv;
   }
+
+  public static ObservableNumbersConsumer getConsumer(SynchronizedObservableCounter counter) {
+    ObservableNumbersConsumer rv = new ObservableNumbersConsumer("Consumer" + nextConsumerId, counter, NUM_INCREMENTS);
+    nextConsumerId++;
+    return rv;
+  }
 }
