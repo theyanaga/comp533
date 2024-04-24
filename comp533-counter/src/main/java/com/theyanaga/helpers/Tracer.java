@@ -14,7 +14,12 @@ public class Tracer {
 
   private static boolean on = false;
 
-  private static final int fileSuffix = new File("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/").list().length + 1;
+//  private static final int fileSuffix = new File("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/").list().length + 1;
+//  private static final int fileSuffix = new File("./QueueHistory/").list().length + 1;
+//  private static final int fileSuffix = new File("./QueueHistory/").list().length + 1;
+  private static final int fileSuffix = 0;
+
+
 
   public static void logThread(Thread thread) {
     log("Thread: " + thread.getName() + " using threadId: " + thread.getId());
@@ -91,7 +96,9 @@ public class Tracer {
 
   public static void writeCommand(String command) {
     try {
-      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+//      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+        Files.writeString(Paths.get(logDirectory.getAbsolutePath()+fileSuffix+ ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -101,13 +108,24 @@ public class Tracer {
   public static void logTraces() {
     on = true;
   }
+ static  String LOGS_DIRECTORY_NAME = "queueLogs";
+static File logDirectory;
 
   private static void write(String s) {
     System.out.println(s);
     try {
-      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+//      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+      Files.writeString(Paths.get(logDirectory.getAbsolutePath()+fileSuffix+ ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
+    		  
+
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  static {
+	  logDirectory = new File(LOGS_DIRECTORY_NAME);
+	  logDirectory.mkdirs();
+	  
+	  
   }
 }

@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 public class LogGrader {
 
   public static void main(String[] args) throws FileNotFoundException {
+//    boolean rv =  testThatUrgentQueueExists(
+//        "/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs7.out");
     boolean rv =  testThatUrgentQueueExists(
-        "/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs7.out");
-
+            "queueLogs0.out");
     if (rv) {
       System.out.println("Success!");
     }
@@ -89,8 +90,8 @@ public class LogGrader {
 
     String value = nameAndValue[1];
     String[] threadNames = getThreadNames(value);
-
-    return Arrays.stream(threadNames).toList();
+    return Arrays.asList(threadNames);
+//    return Arrays.stream(threadNames).toList();
   }
 
   private static String[] getThreadNames(String value) {

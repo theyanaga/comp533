@@ -31,21 +31,21 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
   }
 
   private void waitForNotification(boolean fromConsumer) throws InterruptedException  {
-    try {
-      System.out.println(RemoteServer.getClientHost());
-    }
-    catch (ServerNotActiveException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      System.out.println(RemoteServer.getClientHost());
+//    }
+//    catch (ServerNotActiveException e) {
+//      e.printStackTrace();
+//    }
     Thread thread = Thread.currentThread();
     if (!threadIds.contains(thread.getId())) {
       if (fromConsumer) {
         consumerThreads.add(thread);
-        thread.setName("consumer" + (consumerThreads.size() - 1));
+//        thread.setName("consumer" + (consumerThreads.size() - 1));
       }
       else {
         producerThreads.add(thread);
-        thread.setName("producer" + (producerThreads.size() - 1));
+//        thread.setName("producer" + (producerThreads.size() - 1));
       }
       threadIds.add(thread.getId());
     }
@@ -59,6 +59,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 
   @Override
   public int getValue(String callerName) throws InterruptedException {
+	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
     waitForNotification(true);
     callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
@@ -81,6 +82,8 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 
   @Override
   public void increment(String callerName) throws InterruptedException {
+	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
+
     waitForNotification(false);
     callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
@@ -99,11 +102,11 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
   }
 
   private void sleep() {
-    try {
-     Thread.sleep(2500L);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+//    try {
+//     Thread.sleep(2500L);
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+//    }
   }
 
 //  @Override
