@@ -29,6 +29,9 @@ public class ThreadMapper {
 		}
 		if (!aThreads.contains(aThread)) {
 			aThreads.add(aThread);
+			if (aThreads.size() > 1) {
+				System.out.println("Different server threads:" +aThreads + " assigned to same client thread:" + aRole);
+			}
 		}
 		List<String> aRoles = threadToRoleHistory.get(aThread);
 		if (aRoles == null) {
@@ -37,6 +40,9 @@ public class ThreadMapper {
 		}
 		if (!aRoles.contains(aRole)) {
 			aRoles.add(aRole);
+			if (aRoles.size() > 1) {
+				System.out.println("Different client threads:" +aRoles + " assigned to same server thread:" + aThread);
+			}
 		}
 		Blocker aBlocker = roleToBlocker.get(aRole);
 		if (aBlocker == null) {
