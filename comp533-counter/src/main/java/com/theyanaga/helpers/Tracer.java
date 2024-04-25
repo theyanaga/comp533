@@ -27,7 +27,7 @@ public class Tracer {
 
   public static void log(String s){
     if (on) {
-      System.out.println(s);
+//      System.out.println(s);
       write(s + "\n");
     }
   }
@@ -112,7 +112,7 @@ public class Tracer {
 static File logDirectory;
 
   private static void write(String s) {
-    System.out.println(s);
+//    System.out.println(s);
     try {
 //      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
       Files.writeString(Paths.get(logDirectory.getAbsolutePath()+fileSuffix+ ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);

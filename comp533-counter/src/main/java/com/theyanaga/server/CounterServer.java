@@ -1,6 +1,7 @@
 package com.theyanaga.server;
 
 import com.theyanaga.counters.SynchronizedObservableCounter;
+import com.theyanaga.drivers.PDUserInputDriver;
 import com.theyanaga.drivers.UserInputDriver;
 import com.theyanaga.factories.CounterFactory;
 import com.theyanaga.observables.RemoteCounter;
@@ -20,7 +21,9 @@ public class CounterServer {
         rmiRegistry.rebind("Counter", counter);
 
 
-        UserInputDriver.start("None", counter);
+//        UserInputDriver.start("None", counter);
+        PDUserInputDriver.start("None", counter);
+
     }
 
 }

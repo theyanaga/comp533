@@ -6,6 +6,8 @@ import com.theyanaga.factories.CounterFactory;
 import com.theyanaga.factories.ProducerFactory;
 import com.theyanaga.helpers.Tracer;
 import com.theyanaga.runnable.ControllableRunnable;
+import com.theyanaga.synchronization.Blocker;
+import com.theyanaga.synchronization.ThreadMapper;
 
 import java.rmi.Remote;
 import java.util.ArrayList;
@@ -57,6 +59,26 @@ public class Simulation {
     synchronized (thread) {
       thread.notify();
     }
+  }
+  
+  public void unblockThread(String aRole) {
+//	  doDelay();
+//	    Tracer.writeCommand(aRole);
+	    Blocker aBlocker = ThreadMapper.getRoleToBlocker().get(aRole);
+	    if (aBlocker == null) {
+	    	System.out.println (aRole + " does not exist");
+	    }
+	    else if (!aBlocker.hasBlocked()) {
+	    	System.out.println(aRole + "is not ready to enter monitor, it must be in the entry, condition, or urgent queue");
+	    } else {
+	    	 doDelay();
+	 	    Tracer.writeCommand(aRole);
+	 	    aBlocker.unblock();
+	    }
+//	    Thread thread =  counter.getProducerThreads().get(idx);
+//	    synchronized (thread) {
+//	      thread.notify();
+//	    }
   }
 
   public void releaseProducer(int idx) {

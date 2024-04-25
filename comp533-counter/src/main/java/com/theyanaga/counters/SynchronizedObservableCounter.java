@@ -2,7 +2,9 @@ package com.theyanaga.counters;
 
 import com.theyanaga.helpers.Tracer;
 import com.theyanaga.observables.RemoteCounter;
-import com.theyanaga.observers.Observer;
+import com.theyanaga.observers.QueueObserver;
+import com.theyanaga.synchronization.Blocker;
+import com.theyanaga.synchronization.ThreadMapper;
 
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
@@ -30,7 +32,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     return this.consumerThreads;
   }
 
-  private void waitForNotification(boolean fromConsumer) throws InterruptedException  {
+  private void waitForNotification(boolean fromConsumer, String aCallerName) throws InterruptedException  {
 //    try {
 //      System.out.println(RemoteServer.getClientHost());
 //    }
@@ -38,6 +40,8 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 //      e.printStackTrace();
 //    }
     Thread thread = Thread.currentThread();
+    String aRole = aCallerName;
+    ThreadMapper.map(aCallerName, thread);
     if (!threadIds.contains(thread.getId())) {
       if (fromConsumer) {
         consumerThreads.add(thread);
@@ -50,18 +54,22 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
       threadIds.add(thread.getId());
     }
     Tracer.logCurrentThreadIds(this.threadIds);
-    synchronized (thread) {
-      thread.wait();
-      Tracer.logThread(thread);
-    }
+    Blocker aBlocker = ThreadMapper.getRoleToBlocker().get(aRole);
+    aBlocker.block();
+    Tracer.logThread(thread);
+    
+//    synchronized (thread) {
+//      thread.wait();
+//      Tracer.logThread(thread);
+//    }
   }
 
 
   @Override
   public int getValue(String callerName) throws InterruptedException {
-	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
-    waitForNotification(true);
-    callerName = Thread.currentThread().getName();
+//	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
+    waitForNotification(true, callerName);
+//    callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
     int rv = synchronizedGetValue(callerName);
     super.traceLeftSynchronizedMethod(callerName);
@@ -82,10 +90,10 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 
   @Override
   public void increment(String callerName) throws InterruptedException {
-	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
+//	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
 
-    waitForNotification(false);
-    callerName = Thread.currentThread().getName();
+    waitForNotification(false, callerName);
+//    callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
     synchronizedIncrement(callerName);
     super.traceLeftSynchronizedMethod(callerName);
@@ -110,7 +118,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
   }
 
 //  @Override
-  public void setQueueObserver(Observer observer) {
+  public void setQueueObserver(QueueObserver observer) {
     super.addObserver(observer);
   }
 

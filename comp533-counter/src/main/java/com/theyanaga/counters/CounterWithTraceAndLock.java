@@ -1,6 +1,8 @@
 package com.theyanaga.counters;
 
-import com.theyanaga.observers.Observer;
+import com.theyanaga.observers.QueueObserver;
+import com.theyanaga.synchronization.Blocker;
+import com.theyanaga.synchronization.ThreadMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,11 @@ public class CounterWithTraceAndLock extends DefaultCounter {
 
   private boolean shouldWait = true;
 
-  private Observer observer;
+  private QueueObserver observer;
+  private Blocker releaseBlocker = ThreadMapper.getReleaseBlocker();
 
-  public void addObserver(Observer observer) {
+
+  public void addObserver(QueueObserver observer) {
     this.observer = observer;
   }
 
@@ -49,24 +53,32 @@ public class CounterWithTraceAndLock extends DefaultCounter {
     }
   }
 
+//  public void waitForRelease() {
+//    lock.lock();
+//    while (shouldWait) {
+//      sleep();
+//    }
+//    shouldWait = true;
+//    lock.unlock();
+//  }
+
   public void waitForRelease() {
-    lock.lock();
-    while (shouldWait) {
-      sleep();
-    }
-    shouldWait = true;
-    lock.unlock();
-  }
+	  releaseBlocker.block();
+	  }
 
   public void release() {
-    this.shouldWait = false;
+	 if (!releaseBlocker.hasBlocked()) {
+		 System.out.println("No thread in monitor");
+	 } else {
+		 releaseBlocker.unblock();
+	 }
   }
 
-  private void sleep() {
-    try {
-      Thread.sleep(500L);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
+//  private void sleep() {
+//    try {
+//      Thread.sleep(500L);
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+//    }
+//  }
 }

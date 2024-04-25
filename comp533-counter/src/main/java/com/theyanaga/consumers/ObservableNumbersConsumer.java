@@ -3,7 +3,7 @@ package com.theyanaga.consumers;
 import com.theyanaga.counters.SynchronizedObservableCounter;
 import com.theyanaga.helpers.Methods;
 import com.theyanaga.observables.Observable;
-import com.theyanaga.observers.Observer;
+import com.theyanaga.observers.QueueObserver;
 import com.theyanaga.observers.PropertyChange;
 import com.theyanaga.runnable.ControllableRunnable;
 
