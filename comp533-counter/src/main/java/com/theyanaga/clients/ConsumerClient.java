@@ -10,31 +10,31 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class ConsumerClient {
-  static String consumerId = "consumer";
+  static String rootId = "producer";
+	static int numThreads = 1;
   public static void main(String[] args)
-      throws RemoteException, NotBoundException, InterruptedException {
-	  if (args.length >= 1) {
-		  consumerId = args[0];
-	  }
-    final Registry rmiRegistry = LocateRegistry.getRegistry("localhost", 6000);
-    final Remote counter = (Remote) rmiRegistry.lookup("Counter");
+          throws RemoteException, NotBoundException, InterruptedException {
+  	if (args.length >= 1) {
+  		rootId = args[0];
+  	}
+  	if (args.length >= 2) {
+  		numThreads = Integer.parseInt(args[1]);
+  	}
+      final Registry rmiRegistry = LocateRegistry.getRegistry("localhost", 6000);
+      final Remote counter = (Remote) rmiRegistry.lookup("Counter");
 
-    RemoteCounter aCounter = (RemoteCounter) counter;
+      RemoteCounter aCounter = (RemoteCounter) counter;
+      String mainId = rootId;
+      if (numThreads > 1) {
+      	mainId = rootId + "0";
+      }
+      for (int i = 1; i <= numThreads; i++) {
+      	String anId = rootId + i;
+      	Runnable aForkedRunnable = new ConsumerRunnable(aCounter, anId);
+      	new Thread(aForkedRunnable).start();
+      }
+      Runnable mainRunnable = new ConsumerRunnable(aCounter, mainId);
 
-//    for (int i = 0; i < 6; i++) {
-    try {
-    while (true) {
-//      System.out.println("Called getValue!");
-    	
-      aCounter.getValue(consumerId);
-    	
-//      System.out.println("Returned from getValue!");
-    }
-    } catch (Exception e) {
-		System.out.println(e);
-		System.out.println ("quitting");
-		System.exit(-1);
-//		e.printStackTrace();
-	}
+      mainRunnable.run();
   }
 }

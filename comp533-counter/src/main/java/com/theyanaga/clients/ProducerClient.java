@@ -9,29 +9,46 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class ProducerClient {
-	static String producerId = "producer";
+	static String rootId = "producer";
+	static int numThreads = 1;
     public static void main(String[] args)
             throws RemoteException, NotBoundException, InterruptedException {
     	if (args.length >= 1) {
-    		producerId = args[0];
+    		rootId = args[0];
+    	}
+    	if (args.length >= 2) {
+    		numThreads = Integer.parseInt(args[1]);
     	}
         final Registry rmiRegistry = LocateRegistry.getRegistry("localhost", 6000);
         final Remote counter = (Remote) rmiRegistry.lookup("Counter");
 
         RemoteCounter aCounter = (RemoteCounter) counter;
-
-//        for (int i = 0; i < 6; i++) {
-        try {
-        while (true) {
-//            System.out.println("Called increment!");
-        	
-            aCounter.increment(producerId); 
-        	
-//            System.out.println("Returned from increment!");
+        String mainId = rootId;
+        if (numThreads > 1) {
+        	mainId = rootId + "0";
         }
-        } catch (Exception e) {
-    		System.out.println (e);
-    		System.out.println("Quitting");
-    	}
+        Runnable mainRunnable = new ProducerRunnable(aCounter, mainId);
+        for (int i = 1; i <= numThreads; i++) {
+        	String anId = rootId + i;
+        	Runnable aForkedRunnable = new ProducerRunnable(aCounter, anId);
+        	new Thread(aForkedRunnable).start();
+        }
+        mainRunnable.run();
+
+        
+//
+////        for (int i = 0; i < 6; i++) {
+//        try {
+//        while (true) {
+////            System.out.println("Called increment!");
+//        	
+//            aCounter.increment(rootId); 
+//        	
+////            System.out.println("Returned from increment!");
+//        }
+//        } catch (Exception e) {
+//    		System.out.println (e);
+//    		System.out.println("Quitting");
+//    	}
     }
 }

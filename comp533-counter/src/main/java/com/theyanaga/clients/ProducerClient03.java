@@ -3,9 +3,9 @@ package com.theyanaga.clients;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-public class ConsumerClient1 {
+public class ProducerClient03 {
 	public static void main (String[] args) throws RemoteException, NotBoundException, InterruptedException {
-		String[] myArgs = {"c1"};
-		ConsumerClient.main(myArgs);
+		String[] myArgs = {"p0", "3"};
+		ProducerClient.main(myArgs);
 	}
 }
