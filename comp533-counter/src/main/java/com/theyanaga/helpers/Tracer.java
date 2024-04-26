@@ -21,18 +21,18 @@ public class Tracer {
 
 
 
-  public static void logThread(Thread thread) {
+  public static synchronized void logThread(Thread thread) {
     log("Thread: " + thread.getName() + " using threadId: " + thread.getId());
   }
 
-  public static void log(String s){
+  public synchronized static void log(String s){
     if (on) {
 //      System.out.println(s);
       write(s + "\n");
     }
   }
 
-  public static void log(PropertyChange propertyChange) {
+  public static synchronized void  log(PropertyChange propertyChange) {
     if (on) {
       String s =
           propertyChange.callerName()
@@ -46,7 +46,7 @@ public class Tracer {
     }
   }
 
-  public static void logQueueState(
+  public static synchronized void logQueueState(
       Queue<String> entryQueue,
       Queue<String> conditionQueue,
       Queue<String> urgentQueue,
@@ -65,14 +65,14 @@ public class Tracer {
     }
   }
 
-  public static void logCurrentThreadIds(List<Long> threads) {
+  public synchronized static void logCurrentThreadIds(List<Long> threads) {
     if (on) {
       log("Threads: " + threads);
     }
 
   }
 
-  public static void logEnterAndExitOrders(
+  public synchronized static void logEnterAndExitOrders(
           List<String> entryQueueEnterOrder,
           List<String> entryQueueExitOrder,
           List<String> conditionQueueEnterOrder,
@@ -94,7 +94,7 @@ public class Tracer {
     }
   }
 
-  public static void writeCommand(String command) {
+  public synchronized static void writeCommand(String command) {
     try {
 //      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
         Files.writeString(Paths.get(logDirectory.getAbsolutePath()+fileSuffix+ ".in"), command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
@@ -105,13 +105,13 @@ public class Tracer {
 
   }
 
-  public static void logTraces() {
+  public synchronized static void logTraces() {
     on = true;
   }
  static  String LOGS_DIRECTORY_NAME = "queueLogs";
 static File logDirectory;
 
-  private static void write(String s) {
+  private synchronized static void write(String s) {
 //    System.out.println(s);
     try {
 //      Files.writeString(Paths.get("/Users/felipeyanaga/UNC/ta/comp533s24/code-assingments/comp533-counter/src/main/resources/QueueHistory/logs" + (fileSuffix) + ".out"), s, StandardOpenOption.APPEND,StandardOpenOption.CREATE);
