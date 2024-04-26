@@ -1,0 +1,144 @@
+Threads: [22]
+Threads: [22, 24, 23]
+Threads: [22, 24, 23]
+Threads: [22, 24, 23, 26]
+Threads: [22, 24, 23, 26, 27]
+Threads: [22, 24, 23, 26, 27, 28, 29]
+Threads: [22, 24, 23, 26, 27, 28, 29]
+Thread: RMI TCP Connection(2)-152.23.153.159 using threadId: 22
+c00:GET_VALUE-ATTEMPTED- TIME - 1714149425108
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00]
+Entry Queue Exit Order: []
+Condition Queue Enter Order: []
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+c00:INCREMENT-ENTERED- TIME - 1714149425116
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00]
+Entry Queue Exit Order: [c00]
+Condition Queue Enter Order: []
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+c00:WAIT-ENTERED- TIME - 1714149425118
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00]
+Entry Queue Exit Order: [c00]
+Condition Queue Enter Order: [c00]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+Thread: RMI TCP Connection(4)-152.23.153.159 using threadId: 24
+c01:GET_VALUE-ATTEMPTED- TIME - 1714149426895
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01]
+Entry Queue Exit Order: [c00]
+Condition Queue Enter Order: [c00]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+c01:INCREMENT-ENTERED- TIME - 1714149426896
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01]
+Entry Queue Exit Order: [c00, c01]
+Condition Queue Enter Order: [c00]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+c01:WAIT-ENTERED- TIME - 1714149426898
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01]
+Entry Queue Exit Order: [c00, c01]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+Thread: RMI TCP Connection(8)-152.23.153.159 using threadId: 28
+p00:GET_VALUE-ATTEMPTED- TIME - 1714149451026
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01, p00]
+Entry Queue Exit Order: [c00, c01]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+p00:INCREMENT-ENTERED- TIME - 1714149451028
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01, p00]
+Entry Queue Exit Order: [c00, c01, p00]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+increment-->1
+p00:GET_VALUE-LEFT- TIME - 1714149459392
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01, p00]
+Entry Queue Exit Order: [c00, c01, p00]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+c00:WAIT-LEFT- TIME - 1714149459393
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01, p00, c00]
+Entry Queue Exit Order: [c00, c01, p00]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: [c00]
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+Threads: [22, 24, 23, 26, 27, 28, 29]
+c00:RESUME_AFTER_WAIT-ENTERED- TIME - 1714149459395
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [c00, c01, p00, c00]
+Entry Queue Exit Order: [c00, c01, p00, c00]
+Condition Queue Enter Order: [c00, c01]
+Condition Queue Exit Order: [c00]
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.

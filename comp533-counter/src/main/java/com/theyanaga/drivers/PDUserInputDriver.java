@@ -17,7 +17,6 @@ import java.util.Scanner;
 
 public class PDUserInputDriver {
    public static final String DONE = "done";
-
   public static final String QUIT = "bye";
   public static final String RELEASE = "release";
   public static final String ENTER = "enter";
@@ -39,6 +38,17 @@ public class PDUserInputDriver {
 	  System.out.println("Condition Queue:" + aConditionQueue);
 	  ThreadMapper.printMonitorOccupent();
 	  
+  }
+
+  public static void printCurrentOrders(QueueObserver aQueueObserver) {
+      System.out.println("Entry Order:" + aQueueObserver.getEntryQueueEnterOrder());
+      System.out.println("Exit Order:" + aQueueObserver.getEntryQueueExitOrder());
+      System.out.println("Condition Order:" + aQueueObserver.getConditionQueueEntryOrder());
+      System.out.println("Condition Exit Order:" + aQueueObserver.getConditionQueueExitOrder());
+      System.out.println("Urgent Order:" + aQueueObserver.getUrgentQueueEntryOrder());
+      System.out.println("Urgent Exit Order:" + aQueueObserver.getUrgentQueueExitOrder());
+      ThreadMapper.printMonitorOccupent();
+
   }
 
   public static void start(String fileName, SynchronizedObservableCounter counter) throws InterruptedException, FileNotFoundException {
@@ -69,15 +79,21 @@ public class PDUserInputDriver {
       }
       else if (QUEUES.startsWith(aCommand)) {
     	  printCurrentQueues(queueObserver);
-    	  
       }
       else if (QUIT.startsWith(aCommand)){
+          // In the case that they passed the file as a parameter to bye, for example "bye pass.out"
+          if (inputs.length == 2) {
+              Tracer.setOutputFile(inputs[1].strip());
+          }
         System.out.println("Quitting program!");
         break;
       }
       else if (RELEASE.startsWith(aCommand))  {
           simulation.notifyThreadInMonitor();
         }
+      else if (HISTORY.startsWith(aCommand)) {
+          printCurrentOrders(queueObserver);
+      }
       else if (ENTER.startsWith(aCommand)) {
 //    	  if (inputs.length < 2) {
 //    		  System.out.println("Missing argument to " + ENTER + " command");

@@ -52,8 +52,8 @@ private String executingThread = "None";
   }
 
   private void handleResumeExecutionAfterWait(String currentCaller) {
-    removeFromQueue(currentCaller, this.urgentQueue, true);
-    this.entryQueueExitOrder.add(currentCaller);
+    removeFromQueue(currentCaller, this.urgentQueue, false);
+    this.urgentQueueExitOrder.add(currentCaller);
     this.executingThread = currentCaller;
   }
 
@@ -63,9 +63,7 @@ private String executingThread = "None";
       this.conditionQueueEntryOrder.add(currentCaller);
       this.executingThread = "None";
     } else if (propertyChange.action() == Action.LEFT) {
-      removeFromQueue(currentCaller, conditionQueue, false);
-      this.conditionQueueExitOrder.add(currentCaller);
-      this.entryQueueEnterOrder.add(currentCaller);
+      removeFromQueue(currentCaller, conditionQueue, true);
 //      this.urgentQueue.add(currentCaller);
 //      this.urgentQueueEntryOrder.add(currentCaller);
       this.executingThread = "None";
@@ -86,8 +84,13 @@ private String executingThread = "None";
     }
   }
 
-  private void removeFromQueue(String currentCaller, Queue<String> queue, boolean isUrgentQueue) {
+  private void removeFromQueue(String currentCaller, Queue<String> queue, boolean isConditionQueue) {
     queue.removeIf(s -> s.equalsIgnoreCase(currentCaller));
+    if (isConditionQueue) {
+      this.conditionQueueExitOrder.add(currentCaller);
+      this.urgentQueue.add(currentCaller);
+      this.urgentQueueEntryOrder.add(currentCaller);
+    }
   }
 
   private void printState() {

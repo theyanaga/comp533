@@ -1,0 +1,59 @@
+Threads: [22]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25, 27]
+Threads: [22, 23, 24, 25, 27, 28]
+Threads: [22, 23, 24, 25, 27, 28, 29]
+Threads: [22]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25, 29]
+Threads: [22, 23, 24, 25, 29, 26, 27, 28]
+Threads: [22, 23, 24, 25, 29, 26, 27, 28]
+Threads: [22, 23, 24, 25, 29, 26, 27, 28]
+Threads: [22]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25]
+Threads: [22, 23, 24, 25, 27]
+Threads: [22, 23, 24, 25, 27, 28, 29]
+Thread: RMI TCP Connection(4)-152.23.153.159 using threadId: 24
+p00:GET_VALUE-ATTEMPTED- TIME - 1714146693007
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [p00]
+Entry Queue Exit Order: []
+Condition Queue Enter Order: []
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+p00:INCREMENT-ENTERED- TIME - 1714146693017
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [p00]
+Entry Queue Exit Order: [p00]
+Condition Queue Enter Order: []
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
+Thread: RMI TCP Connection(7)-152.23.153.159 using threadId: 27
+c01:GET_VALUE-ATTEMPTED- TIME - 1714146709414
+
+Start Orders.
+-----------------------------------------------------------------------
+Entry Queue Enter Order: [p00, c01]
+Entry Queue Exit Order: [p00]
+Condition Queue Enter Order: []
+Condition Queue Exit Order: []
+Urgent Queue Enter Order: []
+Urgent Queue Exit Order: []
+-----------------------------------------------------------------------
+End Orders.
