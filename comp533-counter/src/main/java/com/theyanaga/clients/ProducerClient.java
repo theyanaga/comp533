@@ -23,16 +23,17 @@ public class ProducerClient {
         final Remote counter = (Remote) rmiRegistry.lookup("Counter");
 
         RemoteCounter aCounter = (RemoteCounter) counter;
-        String mainId = rootId;
-        if (numThreads > 1) {
-        	mainId = rootId + "0";
-        }
-        Runnable mainRunnable = new ProducerRunnable(aCounter, mainId);
+        String mainId = rootId+"0";
+//        if (numThreads > 1) {
+//        	mainId = rootId + "0";
+//        }
         for (int i = 1; i <= numThreads; i++) {
         	String anId = rootId + i;
-        	Runnable aForkedRunnable = new ProducerRunnable(aCounter, anId);
+        	Runnable aForkedRunnable = new ProducerRunnable(aCounter, anId, false);
         	new Thread(aForkedRunnable).start();
         }
+        Runnable mainRunnable = new ProducerRunnable(aCounter, mainId, true);
+
         mainRunnable.run();
 
         

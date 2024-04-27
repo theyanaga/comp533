@@ -1,4 +1,4 @@
-package com.theyanaga.drivers;
+package com.theyanaga.input;
 
 import com.theyanaga.counters.SynchronizedObservableCounter;
 import com.theyanaga.helpers.Tracer;

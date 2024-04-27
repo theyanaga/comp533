@@ -1,4 +1,4 @@
-package com.theyanaga.drivers;
+package com.theyanaga.input;
 
 import com.theyanaga.counters.SynchronizedObservableCounter;
 import com.theyanaga.factories.QueueObserverFactory;
@@ -12,10 +12,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class PDUserInputDriver {
+public class ServerInputProcessor {
    public static final String DONE = "done";
   public static final String QUIT = "bye";
   public static final String RELEASE = "release";
@@ -24,20 +25,33 @@ public class PDUserInputDriver {
   public static final String THREADS = "threads";
   public static final String QUEUES = "queues";
   public static final String HISTORY = "history";
+  public static final String MAPPING = "mapping";
   
-  private static String[] commands = {THREADS, ENTER, RELEASE,  QUEUES, HISTORY, QUIT};
+  private static String[] commands = {
+//		  THREADS,
+		  ENTER, 
+		  RELEASE, 
+		  QUEUES,
+		  MAPPING,
+//		  HISTORY, 
+		  QUIT};
   private static  QueueObserver queueObserver;
   
   public static void printCurrentQueues(QueueObserver aQueueObserver) {
-	  
+	  List<String> aReadyToProceedList = aQueueObserver.getReadyToProceedList();
 	  Queue anEntryQueue = aQueueObserver.getEntryQueue();	  
 	  Queue aConditionQueue = aQueueObserver.getConditionQueue();
 	  Queue anUrgentQueue = aQueueObserver.getUrgentQueue();
-	  System.out.println("Entry Queue:" + anEntryQueue);
-	  System.out.println("Urgent Queue:" + anUrgentQueue);
-	  System.out.println("Condition Queue:" + aConditionQueue);
-	  ThreadMapper.printMonitorOccupent();
-	  
+	  System.out.println("Ready to Proceed:" + aReadyToProceedList);
+	  System.out.println("Entry List:" + anEntryQueue);
+	  System.out.println("Urgent List:" + anUrgentQueue);
+	  System.out.println("Condition List:" + aConditionQueue);
+	  ThreadMapper.printMonitorOccupent();	  
+  }
+  
+  public static void printReadyToProceedList(QueueObserver aQueueObserver) {
+	  List<String> aReadyToProceedList = aQueueObserver.getReadyToProceedList();
+	  System.out.println("Ready to proceed:" + aReadyToProceedList);
   }
 
   public static void printCurrentOrders(QueueObserver aQueueObserver) {
@@ -75,6 +89,13 @@ public class PDUserInputDriver {
       String[] inputs = scanner.nextLine().toLowerCase().split(" ");
       String aCommand = inputs[0].strip();
       if (THREADS.startsWith(aCommand)) {
+//    	  ThreadMapper.printCurrentRoles();
+    	  printReadyToProceedList(queueObserver);
+//      } else if (MAPPING.startsWith(aCommand)) {
+//    	  ThreadMapper.printRoleThreadHistory();
+//    	  ThreadMapper.printRoleThreadHistory();
+      }  if (MAPPING.startsWith(aCommand)) {
+    	  ThreadMapper.printRoleThreadHistory();
     	  ThreadMapper.printThreadRoleHistory();
       }
       else if (QUEUES.startsWith(aCommand)) {
@@ -101,6 +122,7 @@ public class PDUserInputDriver {
 //    	  }
     	  String aRole = getArgument(inputs);
     	  if (aRole == null) {
+    		  System.out.println("Please give client thread argument to command");
     		  continue;
     	  }
     			
@@ -126,7 +148,7 @@ public class PDUserInputDriver {
       }
         else {
           System.out.println("Invalid command!");
-          break;
+          continue;
         }
     }
     System.exit(0);

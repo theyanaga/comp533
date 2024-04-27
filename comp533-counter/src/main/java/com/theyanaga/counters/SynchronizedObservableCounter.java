@@ -39,6 +39,10 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
 //    catch (ServerNotActiveException e) {
 //      e.printStackTrace();
 //    }
+	  
+	    super.traceReadyToProceed(aCallerName);
+
+	 
     Thread thread = Thread.currentThread();
     String aRole = aCallerName;
     ThreadMapper.map(aCallerName, thread);
@@ -68,7 +72,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
   @Override
   public int getValue(String callerName) throws InterruptedException {
 //	  System.out.println(Thread.currentThread() + " " + Thread.currentThread().getName() );
-    waitForNotification(true, callerName);
+	 waitForNotification(true, callerName);
 //    callerName = Thread.currentThread().getName();
     super.traceSynchronizedMethodAttempt(callerName);
     int rv = synchronizedGetValue(callerName);
@@ -85,6 +89,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     int rv = super.getValue();
     producerConsumerTurn = ProducerConsumerTurn.PRODUCER_TURN;
     notifyAll();
+    super.traceNotifyAll();
     return rv;
   }
 
@@ -106,7 +111,8 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
     super.waitForRelease();
     super.increment();
     producerConsumerTurn = ProducerConsumerTurn.CONSUMER_TURN;
-    notify(); // Notify or notify all?
+    notifyAll(); // Notify or notify all?
+    super.traceNotifyAll();
   }
 
   private void sleep() {
@@ -127,11 +133,14 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
       try {
         super.traceEnteredWait(callerName);
         wait();
+        super.traceResumedExecutionAfterWait(callerName);
+
+//        super.traceLeftWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    super.traceLeftWait(callerName);
+//    super.traceLeftWait(callerName);
   }
 
   public void waitForProducerTurn(String callerName) {
@@ -139,11 +148,12 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
       try {
         super.traceEnteredWait(callerName);
         wait();
+        super.traceResumedExecutionAfterWait(callerName);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    super.traceLeftWait(callerName);
+//    super.traceLeftWait(callerName);
   }
 
 //  @Override

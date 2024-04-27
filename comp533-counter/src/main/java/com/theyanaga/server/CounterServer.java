@@ -1,9 +1,9 @@
 package com.theyanaga.server;
 
 import com.theyanaga.counters.SynchronizedObservableCounter;
-import com.theyanaga.drivers.PDUserInputDriver;
-import com.theyanaga.drivers.UserInputDriver;
 import com.theyanaga.factories.CounterFactory;
+import com.theyanaga.input.ServerInputProcessor;
+import com.theyanaga.input.UserInputDriver;
 import com.theyanaga.observables.RemoteCounter;
 
 import java.io.FileNotFoundException;
@@ -23,7 +23,7 @@ public class CounterServer {
         rmiRegistry.rebind("Counter", counter);
 
 
-        PDUserInputDriver.start("None", counter);
+        ServerInputProcessor.start("None", counter);
 
     }
 

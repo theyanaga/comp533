@@ -6,11 +6,14 @@ import java.util.Queue;
 public interface QueueObserver {
 
 
-   public void enteredWait(String callerName);
+   public  void enteredWait(String callerName);
 
    public void leftWait(String callerName);
 
    public void attemptedSynchronizedGetValue(String callerName);
+   
+   public void readyToProceed (String callerName);
+
 
    public void enteredSynchronizedGetValue(String callerName);
 
@@ -44,4 +47,8 @@ List<String> getUrgentQueueEntryOrder() ;
 List<String> getMonitorEntryOrder();
 
 List<String> getMonitorExitOrder();
+
+List<String> getReadyToProceedList();
+
+void resumedAfterWait(String callerName);
 }

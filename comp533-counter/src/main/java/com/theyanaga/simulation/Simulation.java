@@ -69,7 +69,7 @@ public class Simulation {
 	    	System.out.println (aRole + " does not exist");
 	    }
 	    else if (!aBlocker.hasBlocked()) {
-	    	System.out.println(aRole + "is not ready to enter monitor, it must be in the entry, condition, or urgent queue");
+	    	System.out.println(aRole + "is not ready to  proeed");
 	    } else {
 	    	 doDelay();
 	 	    Tracer.writeCommand(aRole);

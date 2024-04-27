@@ -67,9 +67,16 @@ public class ThreadMapper {
 		System.out.println(roleToBlocker.keySet());
 	}
 	
-	public static void printThreadRoleHistory() {
+	public static void printRoleThreadHistory() {
+		System.out.println("Client Threads Mapped to Server Threads");
 		for (String aRole:roleToThreadHistory.keySet()) {
 			System.out.println (aRole + ":" + roleToThreadHistory.get(aRole));
+		}
+	}
+	public static void printThreadRoleHistory() {
+		System.out.println("Server Threads Mapped to Client Threads");
+		for (Thread aThread:threadToRoleHistory.keySet()) {
+			System.out.println (aThread + ":" + threadToRoleHistory.get(aThread));
 		}
 	}
 	

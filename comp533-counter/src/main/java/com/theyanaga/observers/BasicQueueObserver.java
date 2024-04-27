@@ -19,6 +19,9 @@ private String executingThread = "None";
   private Queue<String> urgentQueue = new LinkedList<>();
 
   private List<String> entryQueueEnterOrder = new ArrayList<>();
+  
+  private List<String> readyToProceedList = new ArrayList<>();
+
 
   private List<String> entryQueueExitOrder = new ArrayList<>();
 
@@ -57,18 +60,30 @@ private String executingThread = "None";
     this.executingThread = currentCaller;
   }
 
+//  private void handleWait(PropertyChange propertyChange, String currentCaller) {
+//    if (propertyChange.action() == Action.ENTERED) {
+//      this.conditionQueue.add(currentCaller);
+//      this.conditionQueueEntryOrder.add(currentCaller);
+//      this.executingThread = "None";
+//    } else if (propertyChange.action() == Action.LEFT) {
+//      removeFromQueue(currentCaller, conditionQueue, true);
+////      this.urgentQueue.add(currentCaller);
+////      this.urgentQueueEntryOrder.add(currentCaller);
+//      this.executingThread = "None";
+//    }
+//  }
   private void handleWait(PropertyChange propertyChange, String currentCaller) {
-    if (propertyChange.action() == Action.ENTERED) {
-      this.conditionQueue.add(currentCaller);
-      this.conditionQueueEntryOrder.add(currentCaller);
-      this.executingThread = "None";
-    } else if (propertyChange.action() == Action.LEFT) {
-      removeFromQueue(currentCaller, conditionQueue, true);
-//      this.urgentQueue.add(currentCaller);
-//      this.urgentQueueEntryOrder.add(currentCaller);
-      this.executingThread = "None";
-    }
-  }
+	    if (propertyChange.action() == Action.ENTERED) {
+	      this.conditionQueue.add(currentCaller);
+	      this.conditionQueueEntryOrder.add(currentCaller);
+	      this.executingThread = "None";
+	    } else if (propertyChange.action() == Action.LEFT) {
+	      removeFromQueue(currentCaller, conditionQueue, true);
+//	      this.urgentQueue.add(currentCaller);
+//	      this.urgentQueueEntryOrder.add(currentCaller);
+	      this.executingThread = "None";
+	    }
+	  }
 
   private void handleSynchronizedMethod(String currentCaller, PropertyChange propertyChange, Queue<String> queue) {
     if (propertyChange.action() == Action.ATTEMPTED) {
@@ -116,98 +131,116 @@ private String executingThread = "None";
   public void leftWait(String callerName) {
     changeState(new PropertyChange(callerName, Methods.WAIT, Action.LEFT));
   }
-
+  
   @Override
-  public void attemptedSynchronizedGetValue(String callerName) {
-    changeState(new PropertyChange(callerName, Methods.GET_VALUE, Action.ATTEMPTED));
+  public void resumedAfterWait(String callerName) {
+    changeState(new PropertyChange(callerName, Methods.RESUME_AFTER_WAIT, Action.LEFT));
   }
 
   @Override
-  public void enteredSynchronizedGetValue(String callerName) {
+  public synchronized void attemptedSynchronizedGetValue(String callerName) {
+	 readyToProceedList.remove(callerName);
+    changeState(new PropertyChange(callerName, Methods.GET_VALUE, Action.ATTEMPTED));
+  }
+  
+  @Override
+  public synchronized void readyToProceed(String callerName) {
+  	readyToProceedList.add(callerName);
+  }
+
+  @Override
+  public synchronized void enteredSynchronizedGetValue(String callerName) {
     changeState(new PropertyChange(callerName, Methods.GET_VALUE, Action.ENTERED));
   }
 
   @Override
-  public void leftSynchronizedGetValue(String callerName) {
+  public synchronized void leftSynchronizedGetValue(String callerName) {
     changeState(new PropertyChange(callerName, Methods.GET_VALUE, Action.LEFT));
   }
 
   @Override
-  public void attemptedSynchronizedIncrement(String callerName) {
+  public synchronized void attemptedSynchronizedIncrement(String callerName) {
     changeState(new PropertyChange(callerName, Methods.INCREMENT, Action.ATTEMPTED));
   }
 
   @Override
-  public void enteredSynchronizedIncrement(String callerName) {
+  public synchronized void enteredSynchronizedIncrement(String callerName) {
     changeState(new PropertyChange(callerName, Methods.INCREMENT, Action.ENTERED));
   }
 
   @Override
-  public void leftSynchronizedIncrement(String callerName) {
+  public synchronized void leftSynchronizedIncrement(String callerName) {
     changeState(new PropertyChange(callerName, Methods.INCREMENT, Action.LEFT));
   }
 
   @Override
-  public void resumedExecutionAfterWait(String callerName) {
+  public synchronized void resumedExecutionAfterWait(String callerName) {
     changeState(new PropertyChange(callerName, Methods.RESUME_AFTER_WAIT, Action.ENTERED));
   }
   
   @Override
-  public String getExecutingThread() {
+  public synchronized String getExecutingThread() {
 		return executingThread;
 	}
   @Override
-	public Queue<String> getEntryQueue() {
+	public synchronized Queue<String> getEntryQueue() {
 		return entryQueue;
 	}
 
   @Override
-public Queue<String> getConditionQueue() {
+public synchronized Queue<String> getConditionQueue() {
 		return conditionQueue;
 	}
 
   @Override
-public Queue<String> getUrgentQueue() {
+public synchronized Queue<String> getUrgentQueue() {
 		return urgentQueue;
 	}
 
   @Override
-public List<String> getEntryQueueEnterOrder() {
+public synchronized List<String> getEntryQueueEnterOrder() {
 		return entryQueueEnterOrder;
 	}
 
   @Override
-public List<String> getEntryQueueExitOrder() {
+public synchronized List<String> getEntryQueueExitOrder() {
 		return entryQueueExitOrder;
 	}
 
   @Override
-public List<String> getConditionQueueEntryOrder() {
+public synchronized List<String> getConditionQueueEntryOrder() {
 		return conditionQueueEntryOrder;
 	}
 
   @Override
-public List<String> getConditionQueueExitOrder() {
+public synchronized List<String> getConditionQueueExitOrder() {
 		return conditionQueueExitOrder;
 	}
 
   @Override
- public List<String> getUrgentQueueEntryOrder() {
+ public synchronized List<String> getUrgentQueueEntryOrder() {
 		return urgentQueueEntryOrder;
 	}
 
   @Override
-	public List<String> getUrgentQueueExitOrder() {
+	public synchronized List<String> getUrgentQueueExitOrder() {
 		return urgentQueueExitOrder;
 	}
 
   @Override
-public List<String> getMonitorEntryOrder() {
+public synchronized List<String> getMonitorEntryOrder() {
 		return monitorEntryOrder;
 	}
 
   @Override
-public List<String> getMonitorExitOrder() {
+public synchronized List<String> getMonitorExitOrder() {
 		return monitorExitOrder;
 	}
+
+@Override
+public synchronized List<String> getReadyToProceedList() {
+	return readyToProceedList;
+}
+
+
 }

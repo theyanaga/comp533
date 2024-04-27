@@ -12,6 +12,7 @@ import java.rmi.registry.Registry;
 public class ConsumerClient {
   static String rootId = "producer";
 	static int numThreads = 1;
+	
   public static void main(String[] args)
           throws RemoteException, NotBoundException, InterruptedException {
   	if (args.length >= 1) {
@@ -24,17 +25,16 @@ public class ConsumerClient {
       final Remote counter = (Remote) rmiRegistry.lookup("Counter");
 
       RemoteCounter aCounter = (RemoteCounter) counter;
-      String mainId = rootId;
-      if (numThreads > 1) {
-      	mainId = rootId + "0";
-      }
+      String mainId = rootId + "0";
+//      if (numThreads > 1) {
+//      	mainId = rootId + "0";
+//      }
       for (int i = 1; i <= numThreads; i++) {
       	String anId = rootId + i;
-      	Runnable aForkedRunnable = new ConsumerRunnable(aCounter, anId);
+      	Runnable aForkedRunnable = new ConsumerRunnable(aCounter, anId, false);
       	new Thread(aForkedRunnable).start();
       }
-      Runnable mainRunnable = new ConsumerRunnable(aCounter, mainId);
-
+      Runnable mainRunnable = new ConsumerRunnable(aCounter, mainId, true);
       mainRunnable.run();
   }
 }
