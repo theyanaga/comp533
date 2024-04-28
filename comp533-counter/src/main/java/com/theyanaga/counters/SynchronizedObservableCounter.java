@@ -57,7 +57,7 @@ public class SynchronizedObservableCounter extends CounterWithTraceAndLock imple
       }
       threadIds.add(thread.getId());
     }
-    Tracer.logCurrentThreadIds(this.threadIds);
+//    Tracer.logCurrentThreadIds(this.threadIds);
     Blocker aBlocker = ThreadMapper.getRoleToBlocker().get(aRole);
     aBlocker.block();
     Tracer.logThread(thread);

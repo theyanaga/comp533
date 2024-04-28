@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.theyanaga.helpers.Tracer;
+
 public class ThreadMapper {
 	static Map<Thread, String> threadToRole = new HashMap();
 	static Map<String, List<Thread>> roleToThreadHistory = new HashMap();
@@ -19,6 +21,16 @@ public class ThreadMapper {
 	public static Map<String, Blocker> getRoleToBlocker() {
 		return roleToBlocker;
 	}
+	
+	public static String toCommaDelimitedString(List aList) {
+		StringBuffer aBuffer = new StringBuffer();
+		for (int i = 0; i < aList.size() -1; i++) {
+			aBuffer.append(aList.get(i).toString());
+			aBuffer.append(",");			
+		}
+		aBuffer.append(aList.get(aList.size() - 1));
+		return aBuffer.toString();
+	}
 
 	public static void map (String aRole, Thread aThread) {
 		threadToRole.put(aThread, aRole);
@@ -29,19 +41,26 @@ public class ThreadMapper {
 		}
 		if (!aThreads.contains(aThread)) {
 			aThreads.add(aThread);
+//			if (aThreads.size() > 1) {
+//				System.out.println("Different server threads:" +aThreads + " assigned to same client thread:" + aRole);
+//			}
 			if (aThreads.size() > 1) {
-				System.out.println("Different server threads:" +aThreads + " assigned to same client thread:" + aRole);
+			String aThreadToRole = "Client Thread," + aRole + "," + toCommaDelimitedString(aThreads);
+			Tracer.log(aThreadToRole);
 			}
 		}
 		List<String> aRoles = threadToRoleHistory.get(aThread);
 		if (aRoles == null) {
 			aRoles = new ArrayList();
+			
 			threadToRoleHistory.put(aThread, aRoles);
 		}
 		if (!aRoles.contains(aRole)) {
 			aRoles.add(aRole);
 			if (aRoles.size() > 1) {
-				System.out.println("Different client threads:" +aRoles + " assigned to same server thread:" + aThread);
+				String aRoleToThreads = "Server Thread," + aThread + "," + toCommaDelimitedString(aRoles);
+				Tracer.log(aRoleToThreads);
+//				System.out.println("Different client threads:" +aRoles + " assigned to same server thread:" + aThread);
 			}
 		}
 		Blocker aBlocker = roleToBlocker.get(aRole);

@@ -94,7 +94,7 @@ public class ServerInputProcessor {
 //      } else if (MAPPING.startsWith(aCommand)) {
 //    	  ThreadMapper.printRoleThreadHistory();
 //    	  ThreadMapper.printRoleThreadHistory();
-      }  if (MAPPING.startsWith(aCommand)) {
+      } else  if (MAPPING.startsWith(aCommand)) {
     	  ThreadMapper.printRoleThreadHistory();
     	  ThreadMapper.printThreadRoleHistory();
       }

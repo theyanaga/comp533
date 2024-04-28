@@ -50,8 +50,8 @@ private String executingThread = "None";
         handleSynchronizedMethod(currentCaller, propertyChange, this.entryQueue);
         break;
     }
-    printState();
-    printOrders();
+    traceState();
+    traceOrders();
   }
 
   private void handleResumeExecutionAfterWait(String currentCaller) {
@@ -108,11 +108,11 @@ private String executingThread = "None";
     }
   }
 
-  private void printState() {
+  private void traceState() {
     Tracer.logQueueState(entryQueue, conditionQueue, urgentQueue, executingThread);
   }
 
-  public void printOrders() {
+  public void traceOrders() {
     Tracer.logEnterAndExitOrders(
         entryQueueEnterOrder,
         entryQueueExitOrder,

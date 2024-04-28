@@ -71,8 +71,9 @@ public class Orders {
         monitorExitOrders.add(createListFromLine(in.nextLine()));
         conditionEnterOrders.add(createListFromLine(in.nextLine()));
         conditionExitOrders.add(createListFromLine(in.nextLine()));
-        urgentExitOrders.add(createListFromLine(in.nextLine()));
         urgentEnterOrders.add(createListFromLine(in.nextLine()));
+        urgentExitOrders.add(createListFromLine(in.nextLine()));
+//        urgentEnterOrders.add(createListFromLine(in.nextLine()));
       }
     }
 
@@ -86,8 +87,18 @@ public class Orders {
         String[] threadNames = getThreadNames(value);
         return Arrays.asList(threadNames);
     }
-
+    
+    static String[] emptyArray = {};
     private static String[] getThreadNames(String value) {
-        return value.trim().replace("[", "").replace("]", "").split(",");
+    	String normalized = value.trim().replace("[", "").replace("]", "");
+    	if (normalized.isEmpty()) {
+    		return emptyArray;
+    	}
+    	String[] retVal = normalized.split(",");
+    	for (int anIndex = 0; anIndex < retVal.length; anIndex++) {
+    		retVal[anIndex] = retVal[anIndex].trim();
+    	}
+        return  retVal;
+//        return value.trim().replace("[", "").replace("]", "").split(",");
     }
 }

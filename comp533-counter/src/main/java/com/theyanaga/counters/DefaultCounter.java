@@ -13,6 +13,7 @@ public class DefaultCounter implements Counter{
 
     public int getValue() {
         Tracer.log("getValue<--" + value);
+        System.out.println("CONSUMED:" + value);
         return value;
     }
 
@@ -20,6 +21,7 @@ public class DefaultCounter implements Counter{
         int temp = value;
         temp++;
         value = temp;
+        System.out.println("PRODUCED:" + value);
         Tracer.log("increment-->" + value);
     }
 

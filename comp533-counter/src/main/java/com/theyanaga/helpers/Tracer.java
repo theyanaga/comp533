@@ -96,6 +96,7 @@ public class Tracer {
     }
   }
 
+  
   public synchronized static void writeCommand(String command) {
     try {
       Files.writeString(commandOutputPath, command, StandardOpenOption.APPEND,StandardOpenOption.CREATE);

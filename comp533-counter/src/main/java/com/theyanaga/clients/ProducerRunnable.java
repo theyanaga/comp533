@@ -28,9 +28,9 @@ public class ProducerRunnable implements Runnable{
 		    }
 		    } catch (Exception e) {
 				System.out.println(e);
+				e.printStackTrace();
 				System.out.println ("quitting");
 				System.exit(-1);
-//				e.printStackTrace();
 			}
 		
 	}
