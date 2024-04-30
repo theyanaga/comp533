@@ -28,12 +28,12 @@ public class ServerInputProcessor {
   public static final String MAPPING = "mapping";
   
   private static String[] commands = {
-//		  THREADS,
+		  THREADS,
 		  ENTER, 
 		  RELEASE, 
 		  QUEUES,
 		  MAPPING,
-//		  HISTORY, 
+		  HISTORY, 
 		  QUIT};
   private static  QueueObserver queueObserver;
   
