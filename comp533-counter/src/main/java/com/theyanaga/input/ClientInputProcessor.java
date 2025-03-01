@@ -6,6 +6,9 @@ public class ClientInputProcessor {
 	static Scanner scanner =  new Scanner(System.in);
 	public static String waitForNextInput(String anId) {
 		System.out.println("Please hit return to make thread:" + anId + " make next remote call");
-		return scanner.nextLine();
+		String retVal = scanner.nextLine();
+		System.out.println("Thread:" + anId + " making next remote call");
+		return retVal;
+
 	}
 }

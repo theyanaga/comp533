@@ -5,6 +5,7 @@ import com.theyanaga.factories.ConsumerFactory;
 import com.theyanaga.factories.CounterFactory;
 import com.theyanaga.factories.ProducerFactory;
 import com.theyanaga.helpers.Tracer;
+import com.theyanaga.input.ServerInputProcessor;
 import com.theyanaga.runnable.ControllableRunnable;
 import com.theyanaga.synchronization.Blocker;
 import com.theyanaga.synchronization.ThreadMapper;
@@ -66,10 +67,11 @@ public class Simulation {
 //	    Tracer.writeCommand(aRole);
 	    Blocker aBlocker = ThreadMapper.getRoleToBlocker().get(aRole);
 	    if (aBlocker == null) {
-	    	System.out.println (aRole + " does not exist");
+//	    	System.out.println (aRole + " does not exist");
+	    	ServerInputProcessor.println(aRole + " does not exist");
 	    }
 	    else if (!aBlocker.hasBlocked()) {
-	    	System.out.println(aRole + "is not ready to  proeed");
+	    	ServerInputProcessor.println(aRole + "is not ready to  proeed");
 	    } else {
 	    	 doDelay();
 	 	    Tracer.writeCommand(aRole);

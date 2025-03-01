@@ -5,6 +5,7 @@ import com.theyanaga.factories.CounterFactory;
 import com.theyanaga.input.ServerInputProcessor;
 import com.theyanaga.input.UserInputDriver;
 import com.theyanaga.observables.RemoteCounter;
+import com.theyanga.logSending.MonitorLogSendingRunnable;
 
 import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
@@ -21,6 +22,8 @@ public class CounterServer {
         SynchronizedObservableCounter counter = CounterFactory.getCounter();
         UnicastRemoteObject.exportObject((RemoteCounter) counter, 0);
         rmiRegistry.rebind("Counter", counter);
+        
+        Thread aLogSendingThread = MonitorLogSendingRunnable.runInThread();
 
 
         ServerInputProcessor.start("None", counter);

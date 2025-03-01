@@ -18,16 +18,18 @@ public class ConsumerRunnable implements Runnable{
 		try {
 		    while (true) {
 //		      System.out.println("Called getValue!");
-		    	
+		    if (waitForUserInput) {
+			    	  ClientInputProcessor.waitForNextInput(id);
+			   }
 		      counter.getValue(id);
-		      if (waitForUserInput) {
-		    	  ClientInputProcessor.waitForNextInput(id);
-		      }
+//		      if (waitForUserInput) {
+//		    	  ClientInputProcessor.waitForNextInput(id);
+//		      }
 		    	
 //		      System.out.println("Returned from getValue!");
 		    }
 		    } catch (Exception e) {
-		    	e.printStackTrace();
+//		    	e.printStackTrace();
 		    	System.out.println ("quitting");
 				System.exit(-1);
 //				e.printStackTrace();

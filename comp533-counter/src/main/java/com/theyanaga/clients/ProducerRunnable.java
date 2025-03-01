@@ -18,17 +18,19 @@ public class ProducerRunnable implements Runnable{
 		try {
 		    while (true) {
 //		      System.out.println("Called getValue!");
-		    	
+		    	if (waitForUserInput) {
+			    	  ClientInputProcessor.waitForNextInput(id);
+			      }
 		      counter.increment(id);
-		      if (waitForUserInput) {
-		    	  ClientInputProcessor.waitForNextInput(id);
-		      }
+//		      if (waitForUserInput) {
+//		    	  ClientInputProcessor.waitForNextInput(id);
+//		      }
 		    	
 //		      System.out.println("Returned from getValue!");
 		    }
 		    } catch (Exception e) {
-				System.out.println(e);
-				e.printStackTrace();
+//				System.out.println(e);
+//				e.printStackTrace();
 				System.out.println ("quitting");
 				System.exit(-1);
 			}

@@ -37,30 +37,36 @@ public class ServerInputProcessor {
 		  QUIT};
   private static  QueueObserver queueObserver;
   
+
+  
   public static void printCurrentQueues(QueueObserver aQueueObserver) {
 	  List<String> aReadyToProceedList = aQueueObserver.getReadyToProceedList();
 	  Queue anEntryQueue = aQueueObserver.getEntryQueue();	  
 	  Queue aConditionQueue = aQueueObserver.getConditionQueue();
 	  Queue anUrgentQueue = aQueueObserver.getUrgentQueue();
-	  System.out.println("Ready to Proceed:" + aReadyToProceedList);
-	  System.out.println("Entry List:" + anEntryQueue);
-	  System.out.println("Urgent List:" + anUrgentQueue);
-	  System.out.println("Condition List:" + aConditionQueue);
+	  println("Ready to Proceed:" + aReadyToProceedList);
+	  println("Entry List:" + anEntryQueue);
+	  println("Urgent List:" + anUrgentQueue);
+	  println("Condition List:" + aConditionQueue);
 	  ThreadMapper.printMonitorOccupent();	  
   }
   
+  public static void println(String aString) {
+	  System.out.println(aString);
+	  Tracer.traceIOLine(aString);
+  }
   public static void printReadyToProceedList(QueueObserver aQueueObserver) {
 	  List<String> aReadyToProceedList = aQueueObserver.getReadyToProceedList();
-	  System.out.println("Ready to proceed:" + aReadyToProceedList);
+	  println("Ready to proceed:" + aReadyToProceedList);
   }
 
   public static void printCurrentOrders(QueueObserver aQueueObserver) {
-      System.out.println("Entry Order:" + aQueueObserver.getEntryQueueEnterOrder());
-      System.out.println("Exit Order:" + aQueueObserver.getEntryQueueExitOrder());
-      System.out.println("Condition Order:" + aQueueObserver.getConditionQueueEntryOrder());
-      System.out.println("Condition Exit Order:" + aQueueObserver.getConditionQueueExitOrder());
-      System.out.println("Urgent Order:" + aQueueObserver.getUrgentQueueEntryOrder());
-      System.out.println("Urgent Exit Order:" + aQueueObserver.getUrgentQueueExitOrder());
+      println("Entry Order:" + aQueueObserver.getEntryQueueEnterOrder());
+      println("Exit Order:" + aQueueObserver.getEntryQueueExitOrder());
+      println("Condition Order:" + aQueueObserver.getConditionQueueEntryOrder());
+      println("Condition Exit Order:" + aQueueObserver.getConditionQueueExitOrder());
+      println("Urgent Order:" + aQueueObserver.getUrgentQueueEntryOrder());
+      println("Urgent Exit Order:" + aQueueObserver.getUrgentQueueExitOrder());
       ThreadMapper.printMonitorOccupent();
 
   }
@@ -83,11 +89,15 @@ public class ServerInputProcessor {
     // "d xxx" is telling the program to sleep "xxx" time.
     
     
-    System.out.println("Start controlling your threads!");
+    println("Start controlling your threads!");
     while (true) {
-    	System.out.println ("Please enter one of  the following commands:" + Arrays.toString(commands));
-      String[] inputs = scanner.nextLine().toLowerCase().split(" ");
+    	println ("Please enter one of  the following commands:" + Arrays.toString(commands));
+    	String aFullInput = scanner.nextLine().toLowerCase();
+//      String[] inputs = scanner.nextLine().toLowerCase().split(" ");
+      String[] inputs = aFullInput.split(" ");
+
       String aCommand = inputs[0].strip();
+      Tracer.traceIOLine(">>" + aFullInput);
       if (THREADS.startsWith(aCommand)) {
 //    	  ThreadMapper.printCurrentRoles();
     	  printReadyToProceedList(queueObserver);
@@ -106,7 +116,7 @@ public class ServerInputProcessor {
           if (inputs.length == 2) {
               Tracer.setOutputFile(inputs[1].strip());
           }
-        System.out.println("Quitting program!");
+        println("Quitting program!");
         break;
       }
       else if (RELEASE.startsWith(aCommand))  {
@@ -117,18 +127,18 @@ public class ServerInputProcessor {
       }
       else if (ENTER.startsWith(aCommand)) {
 //    	  if (inputs.length < 2) {
-//    		  System.out.println("Missing argument to " + ENTER + " command");
+//    		  println("Missing argument to " + ENTER + " command");
 //    		  continue;
 //    	  }
     	  String aRole = getArgument(inputs);
     	  if (aRole == null) {
-    		  System.out.println("Please give client thread argument to command");
+    		  println("Please give client thread argument to command");
     		  continue;
     	  }
     			
 //    	  Blocker aBlocker = ThreadMapper.getRoleToBlocker().get(aRole);
 //    	  if (aBlocker == null) {
-//    		  System.out.println("Unknoewn thread  " + aRole );
+//    		  println("Unknoewn thread  " + aRole );
 //    		  continue;
 //    	  }
     	  simulation.unblockThread(aRole);
@@ -136,7 +146,7 @@ public class ServerInputProcessor {
     	  
       } else if (DELAY.startsWith(aCommand)) {
 //    	  if (inputs.length < 2) {
-//    		  System.out.println("Missing argument to " + DELAY + " command");
+//    		  println("Missing argument to " + DELAY + " command");
 //    		  continue;
 //    	  };
     	  String aDelay = getArgument(inputs);
@@ -147,7 +157,7 @@ public class ServerInputProcessor {
     	  
       }
         else {
-          System.out.println("Invalid command!");
+          println("Invalid command!");
           continue;
         }
     }
@@ -156,33 +166,40 @@ public class ServerInputProcessor {
 
   private static String getArgument(String[] strings) {
 	  if (strings.length < 2) {
-		  System.out.println("Missing argument to command: " + strings[0]);
+		  println("Missing argument to command: " + strings[0]);
 		  return null;
 	  }
 	  return strings[1].strip();
   }
 
   private static Simulation createSimulation(Scanner scanner, SynchronizedObservableCounter counter) {
-//    System.out.println("Type a single digit for the number of consumers:");
+//    println("Type a single digit for the number of consumers:");
 //    int numConsumers = Integer.parseInt(scanner.nextLine());
 //    Tracer.writeCommand(numConsumers + "\n");
-//    System.out.printf("There are %d consumers.%n", numConsumers);
+//    printf("There are %d consumers.%n", numConsumers);
 //    System.out.println("Type a single digit for the number of producers:");
 //    int numProducers= Integer.parseInt(scanner.nextLine());
 //    Tracer.writeCommand(numProducers+ "\n");
 //    System.out.printf("There are %d producers.%n", numProducers);
-//    System.out.printf("Start your consumers and producers.%n");
-    System.out.println("Start your consumers and producer clients and type " + DONE + " when they have all been started");
+//    printf("Start your consumers and producers.%n");
+    println("Start your consumers and producer clients and type " + DONE + " when they have all been started");
 
     Tracer.logTraces();
     String input = scanner.nextLine();
+    Tracer.traceIOLine(">>" + input);
+    if (!input.equalsIgnoreCase("done")) {
+    	println("Need to type done before entering your input:" + input + "\nAssuming teh input is done \n Enter it again if it was intended to be a command ");
+    }
 
-    if (input.equalsIgnoreCase("done")) {
-      return new Simulation(counter);
-    }
-    else {
-      throw new RuntimeException("Error!");
-    }
+    return new Simulation(counter);
+  
+//    if (input.equalsIgnoreCase("done")) {
+//      return new Simulation(counter);
+//    }
+//    else {
+//    	System.err.println("Need to type done before entering your input:" + input + "\n  Assuming teh input is done \n Enter it again if it was intended to be a command ");
+////      throw new RuntimeException("Error!");
+//    }
   }
 
 
