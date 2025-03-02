@@ -139,6 +139,7 @@ public class Tracer {
   public synchronized  static void setOutputFile(String fname) {
     Path newLogOutput = Paths.get(logDirectory.getAbsolutePath() + "/" + fname + ".out");
     Path newCommandOutput = Paths.get(logDirectory.getAbsolutePath() + "/" + fname + ".in");
+    Path newTraceOutput = Paths.get(logDirectory.getAbsolutePath() + "/" + fname + ".trace");
     
 //    latestInputFilePath = newCommandOutput;
 //    latestOutputFilePath = newLogOutput;
@@ -148,6 +149,9 @@ public class Tracer {
 
     renameFile(".out", newLogOutput);
     renameFile(".in", newCommandOutput);
+    renameFile(".trace", newTraceOutput);
+    MonitorLogSender.setFileToSend(newTraceOutput);
+
   }
 
   private static void renameFile(String x, Path logOutput) {

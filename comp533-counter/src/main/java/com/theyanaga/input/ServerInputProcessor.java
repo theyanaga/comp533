@@ -7,6 +7,8 @@ import com.theyanaga.observers.QueueObserver;
 import com.theyanaga.simulation.Simulation;
 import com.theyanaga.synchronization.Blocker;
 import com.theyanaga.synchronization.ThreadMapper;
+import com.theyanga.logSending.MonitorLogSender;
+import com.theyanga.logSending.MonitorLogSendingRunnable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -115,8 +117,16 @@ public class ServerInputProcessor {
           // In the case that they passed the file as a parameter to bye, for example "bye pass.out"
           if (inputs.length == 2) {
               Tracer.setOutputFile(inputs[1].strip());
+              
           }
+          
         println("Quitting program!");
+//        long aSleepTime = (long) (MonitorLogSendingRunnable.getInstance().getTimeDelay() *1.5);
+//        Thread.sleep(aSleepTime);
+//        println("Quit program!");
+        MonitorLogSendingRunnable.getInstance().endProcess(true);
+        MonitorLogSender.sendToServer();
+
         break;
       }
       else if (RELEASE.startsWith(aCommand))  {

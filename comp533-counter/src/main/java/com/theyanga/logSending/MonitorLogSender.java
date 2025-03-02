@@ -275,8 +275,9 @@ private static String assignment;
 		if (anIndexOfSlash != -1) {
 			int anIndexOfDot = logFileName.indexOf('.');
 			if (anIndexOfDot != -1) {
-			assignment = logFileName.substring(anIndexOfSlash + 1, anIndexOfDot);
+			assignment = logFileName.substring(anIndexOfSlash + 1, anIndexOfDot).replaceFirst("FineGrained", "");
 			}
+			
 		}
 	}
 	
@@ -357,6 +358,9 @@ private static String assignment;
 	static  int numTotalRuns = 0;
 
 	protected static void maybeLoadSavedSets() {
+		if (normalizedLastLines == null) {
+			return;
+		}
 		String aRunsString = normalizedLastLines[RUN_INDEX];
 
 		numTotalRuns = Integer.parseInt(aRunsString) + 1;

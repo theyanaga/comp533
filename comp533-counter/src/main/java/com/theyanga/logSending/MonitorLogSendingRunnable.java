@@ -34,8 +34,8 @@ public class MonitorLogSendingRunnable implements Runnable, WindowListener {
 	private boolean end=false;
 	public synchronized void endProcess(boolean b) {
 		end=b;
-		if(logQueue.isEmpty())
-			logQueue.add(null);
+//		if(logQueue.isEmpty())
+//			logQueue.add(null);
 	}
 	
 	@Override
