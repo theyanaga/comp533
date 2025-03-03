@@ -120,12 +120,13 @@ public class ServerInputProcessor {
               
           }
           
-        println("Quitting program!");
 //        long aSleepTime = (long) (MonitorLogSendingRunnable.getInstance().getTimeDelay() *1.5);
 //        Thread.sleep(aSleepTime);
 //        println("Quit program!");
         MonitorLogSendingRunnable.getInstance().endProcess(true);
         MonitorLogSender.sendToServer();
+        println("Quitting program!");
+
 
         break;
       }
